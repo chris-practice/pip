@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Gp List feature.
+ */
+
+include_once 'gp_list.features.inc';

@@ -1,0 +1,74 @@
+StartFontMetrics 4.1
+Notice Converted by PHP-font-lib
+Comment https://github.com/PhenX/php-font-lib
+EncodingScheme FontSpecific
+Copyright FTF Flama Copyright (c) Feliciano Type Foundry, 2004. All rights reserved.
+FontName OXDOHO+Flama-Bold
+FontSubfamily Bold
+UniqueID FontForge 2.0 : OXDOHO+Flama-Bold : 29-12-2015
+FullName OXDOHO+Flama-Bold
+Version Version 1.0
+PostScriptName OXDOHO+Flama-Bold
+Weight Bold
+ItalicAngle 0
+IsFixedPitch false
+UnderlineThickness 50
+UnderlinePosition -175
+FontHeightOffset 0
+Ascender 726
+Descender -195
+FontBBox -4 -195 932 726
+StartCharMetrics 54
+U 32 ; WX 250 ; N space ; G 3
+U 45 ; WX 363 ; N hyphen ; G 4
+U 50 ; WX 592 ; N two ; G 5
+U 58 ; WX 283 ; N colon ; G 6
+U 65 ; WX 711 ; N A ; G 7
+U 66 ; WX 687 ; N B ; G 8
+U 67 ; WX 671 ; N C ; G 9
+U 68 ; WX 693 ; N D ; G 10
+U 69 ; WX 638 ; N E ; G 11
+U 70 ; WX 606 ; N F ; G 12
+U 71 ; WX 673 ; N G ; G 13
+U 72 ; WX 712 ; N H ; G 14
+U 73 ; WX 301 ; N I ; G 15
+U 75 ; WX 697 ; N K ; G 16
+U 76 ; WX 602 ; N L ; G 17
+U 77 ; WX 840 ; N M ; G 18
+U 78 ; WX 733 ; N N ; G 19
+U 79 ; WX 693 ; N O ; G 20
+U 80 ; WX 662 ; N P ; G 21
+U 82 ; WX 677 ; N R ; G 22
+U 83 ; WX 633 ; N S ; G 23
+U 84 ; WX 632 ; N T ; G 24
+U 85 ; WX 708 ; N U ; G 25
+U 86 ; WX 646 ; N V ; G 26
+U 87 ; WX 942 ; N W ; G 27
+U 88 ; WX 650 ; N X ; G 28
+U 89 ; WX 645 ; N Y ; G 29
+U 97 ; WX 573 ; N a ; G 30
+U 98 ; WX 598 ; N b ; G 31
+U 99 ; WX 554 ; N c ; G 32
+U 100 ; WX 598 ; N d ; G 33
+U 101 ; WX 565 ; N e ; G 34
+U 103 ; WX 598 ; N g ; G 35
+U 104 ; WX 602 ; N h ; G 36
+U 105 ; WX 277 ; N i ; G 37
+U 108 ; WX 330 ; N l ; G 38
+U 109 ; WX 925 ; N m ; G 39
+U 110 ; WX 602 ; N n ; G 40
+U 111 ; WX 575 ; N o ; G 41
+U 112 ; WX 598 ; N p ; G 42
+U 113 ; WX 598 ; N q ; G 43
+U 114 ; WX 440 ; N r ; G 44
+U 115 ; WX 540 ; N s ; G 45
+U 116 ; WX 382 ; N t ; G 46
+U 117 ; WX 605 ; N u ; G 47
+U 118 ; WX 546 ; N v ; G 48
+U 119 ; WX 834 ; N w ; G 49
+U 120 ; WX 554 ; N x ; G 50
+U 121 ; WX 553 ; N y ; G 51
+U 122 ; WX 523 ; N z ; G 52
+U 64257 ; WX 634 ; N uniFB01 ; G 53
+EndCharMetrics
+EndFontMetrics

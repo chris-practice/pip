@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the admin device status view feature.
+ */
+
+include_once 'admin_device_status_view.features.inc';

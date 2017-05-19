@@ -1,0 +1,123 @@
+body, div, dl, dt, dd, h1, h2, h3, h4, h5, h6, p, pre, code, blockquote {
+	margin:0;
+	padding:0;
+	border-width:0;
+}
+td, th {
+	border:0;
+}
+body {
+	-epub-hyphens:auto;
+  font-family: arial,sans-serif;
+}
+#page-1 {
+	width:820px;
+}
+.page1-bg-btm {
+	width:720px;
+	height:147px;
+	display:block;
+}
+.pink-bar {
+  text-align: center;
+}
+.pink-bar .col1{
+  background: #76004b;
+  padding:20px;
+}
+.pink-bar .col2{
+  padding-left:0;
+	height: auto;
+}
+.pink-bar .orange-title {
+  font-size:20px;
+  line-height:23px;
+  color:#F26A38;
+  font-family: arial,sans-serif;
+  margin: 0;
+  text-transform:uppercase;
+  text-align:center;
+}
+.pink-bar .white-title {
+  font-size:15px;
+  line-height:26px;
+  color:#fff;
+  font-family: arial,sans-serif;
+  text-transform:uppercase;
+  text-align:center;
+}
+.tbl-wrapper {
+  width:100%;
+	margin:3px 50px;
+  font-size:14px;
+  line-height:33px;
+  color:#F26A38;  
+}
+.tbl-wrapper table {
+  width:100%;
+  font-family: arial,sans-serif;
+}
+.tbl-wrapper table th {
+  background: #76004b;
+  padding: 0 5px 5px 5px;
+	color:#ec612c;
+  text-align: left;
+  font-size:8px;
+  line-height:8px;
+  font-weight:normal;
+  vertical-align:bottom;
+	border-top: #aa658c solid 1px;
+  border-bottom: #ddbfd2 solid 1px;
+  border-left: #aa658c solid 1px;
+  border-right: #ddbfd2 solid 1px;
+}
+.tbl-wrapper table th .meeting-detail span {
+	color:#76004b;
+	margin-right:100px;
+	font-size:8px;
+	font-weight:bold;
+}
+.tbl-wrapper table td {
+  padding: 2px;
+  text-align: left; 
+}
+.tbl-wrapper td.info {
+  font-size:10px;
+  line-height:normal;
+  color:#000;
+  border-top: #828283 solid 1px;
+  border-bottom: #828283 solid 1px;
+  border-left: #828283 solid 1px;
+  border-right: #828283 solid 1px;
+  background:#fff;
+}
+.tbl-wrapper tr td:nth-child(1) { 
+  border-left: #828283 solid 1px !important; 
+}
+.foot-text{
+	font-size:11px;
+	line-height:normal;
+	color:#666;
+}
+.tbl-wrapper td.tbl-label.bms-repr {
+  width:210px;
+}
+.tbl-wrapper td.tbl-label.ur-presenter {
+  width:120px;
+}
+#footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 90px;
+  text-align: left;
+  font-size:7px;
+  color:#58595b;
+  width:750px;
+  line-height:10px;
+  margin-left:0;
+}
+#page-1 {
+	padding-bottom:90px;
+}

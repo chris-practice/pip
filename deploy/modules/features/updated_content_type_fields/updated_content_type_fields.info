@@ -1,0 +1,17 @@
+name = updated content type fields
+description = Contains lead_rep_phone, lead_support_rep_phone, delivered_status, return_status, unique_value fields
+core = 7.x
+package = Features
+dependencies[] = features
+dependencies[] = text
+features[features_api][] = api:2
+features[field_base][] = field_delivered_status
+features[field_base][] = field_lead_rep_phone
+features[field_base][] = field_lead_support_rep_phone
+features[field_base][] = field_return_status
+features[field_base][] = field_unique_value
+features[field_instance][] = node-add_device-field_delivered_status
+features[field_instance][] = node-add_device-field_return_status
+features[field_instance][] = node-add_device-field_unique_value
+features[field_instance][] = node-meetings-field_lead_rep_phone
+features[field_instance][] = node-meetings-field_lead_support_rep_phone

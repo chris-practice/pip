@@ -1,0 +1,321 @@
+<?php
+
+function pfe_pip_meetings_schema() {
+  $schema['extended_users_info'] = array(
+    // Example (partial) specification for table "node".
+    'description' => 'Information of users',
+    'fields' => array(
+
+      'id' => array(
+        'description' => 'User Id.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+    
+      'uid' => array(
+        'description' => 'User Id.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'name' => array(
+        'description' => 'First name of the user.',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'surname' => array(
+        'description' => 'Surname of the user.',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+      ), 
+      'state' => array(
+        'description' => 'Territory states.',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+      ),
+      'phone' => array(
+       'description' => 'Phone number of the user.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+
+    'foreign keys' => array(
+      'user_ref' => array(
+        'table' => 'users',
+        'columns' => array('uid' => 'uid'),
+      ),
+    ),
+    'primary key' => array('id'),
+  );
+
+  $schema['assigned_device'] = array(
+   // specification for assign-device
+   'description' => t('Stores device details.'),
+   'fields' => array(
+      'meetingid' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'description' => 'Meeting ID',
+        //'default' => 0,
+      ),
+      'assignstatus' => array(
+        'type' => 'int',
+        'length' => '5',
+        'not null' => TRUE,
+        'description' => 'Device assign status',
+        'default' => 0,
+      ),    
+      'nodeid' => array(
+        'type' => 'int',
+        'length' => '50',
+        'not null' => TRUE,
+        'description' => 'Node ID',
+        'default' => 0,
+      ),
+      'represponsible_id' => array(
+        'type' => 'int',
+        'length' => '50',
+        'not null' => TRUE,
+        'description' => 'Rep Responsible',
+        'default' => 0,
+      ),
+      'represponsible_name' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'description' => 'Name of Rep responsible for the device',
+        'default' => '',
+      ),
+      'gpname' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'description' => 'The name of the GP to whom device is assigned',
+        'default' => '',
+      ),
+      'gpid' => array(
+        'type' => 'int',
+        'length' => '25',
+        'not null' => TRUE,
+        'description' => 'Id of the GP to whom device is assigned',
+        'default' => 0,
+      ),      
+      'startdate' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'description' => 'The start date of the loan program',
+        'default' => '',
+      ),
+      'enddate' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'description' => 'The end date of the loan program',
+        'default' => '',
+      ),
+      'deviceid' => array(
+        'type' => 'int',
+        'length' => '100',
+        'not null' => TRUE,
+        'description' => 'The device id',
+        'default' => 0,
+      ),
+      'address' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'description' => 'The address of the rep',
+        'default' => '',
+      ),
+      'deliveredstatus' => array(
+       'type' => 'int',
+        'length' => '5',
+        'not null' => TRUE,
+        'description' => 'Device delivered status',
+        'default' => 0,
+      ),
+      'returnstatus' => array(
+        'type' => 'int',
+        'length' => '5',
+        'not null' => TRUE,
+        'description' => 'Device return status',
+        'default' => 0,
+      ),
+      'unique_val' => array(
+        'type' => 'int',
+        'length' => '20',
+        'not null' => TRUE,
+        'description' => 'Unique value',
+      ),
+      'lead_rep_id' => array(
+      'type' => 'varchar',
+      'description' => "ID's of lead representatives",
+      'length' => 50,
+      'not null' => FALSE,
+      ),
+      'supporting_rep_id' => array(
+      'type' => 'varchar',
+      'description' => "ID's of supporting representatives",
+      'length' => 50,
+      'not null' => FALSE,
+      ), 
+
+    )
+  );
+
+ $schema['devices'] = array(
+   // specification for assign-device
+   'description' => t('Stores device IDs.'),
+   'fields' => array(
+      'assignstatus' => array(
+        'type' => 'int',
+        'length' => '5',
+        'not null' => TRUE,
+        'description' => 'Device assign status',
+        'default' => 0,
+      ),
+      'deviceid' => array(
+        'type' => 'int',
+        'length' => '100',
+        'not null' => TRUE,
+        'description' => 'The device id',
+        'default' => 0,
+      ),
+    ) 
+  );
+  
+  
+  $schema['pfe_document_upload'] = array(
+   'description' => t('Stores fids for LRF and LOO.'),
+   'fields' => array(
+     'id' => array(
+       'description' => 'Id',
+       'type' => 'serial',
+       'unsigned' => TRUE,
+       'not null' => TRUE,
+      ),
+      'deviceid' => array(
+        'type' => 'int',
+        'length' => '100',
+        'not null' => TRUE,
+        'description' => 'Device id',
+        'default' => 0,
+      ),
+      'gpid' => array(
+        'type' => 'int',
+        'length' => '100',
+        'not null' => TRUE,
+        'description' => 'Device id',
+        'default' => 0,
+      ),
+      'loan_type' => array(
+        'description' => 'loan type',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ), 
+      'sg_lrf_id' => array(
+        'type' => 'int',
+        'length' => '100',
+        'not null' => TRUE,
+        'description' => 'System genrated LRF fid.',
+        'default' => 0,
+      ),
+      'com_lrf_id' => array(
+        'type' => 'int',
+        'length' => '100',
+        'not null' => TRUE,
+        'description' => 'Completed LRF fid.',
+        'default' => 0,
+      ),
+      'sg_loo_id' => array(
+        'type' => 'int',
+        'length' => '100',
+        'not null' => TRUE,
+        'description' => 'System genrated LOO fid.',
+        'default' => 0,
+      ),
+      'com_loo_id' => array(
+        'type' => 'int',
+        'length' => '100',
+        'not null' => TRUE,
+        'description' => 'Completed LOO fid.',
+        'default' => 0,
+      ),
+    ),
+    'foreign keys' => array(
+      'user_ref' => array(
+        'table' => 'assigned_device',
+        'columns' => array('deviceid' => 'deviceid'),
+      ),
+    ),
+    'primary key' => array('id'),
+  );
+  
+  
+  return $schema;
+}
+
+ function pfe_pip_meetings_update_7050() {
+
+  $mail_flag_seven_days = array(
+    'type' => 'int',
+    'description' => "Sets the value to one when mail is sent to the user",
+    'not null' => TRUE,
+    'default' => '0', 
+  ); 
+
+  $mail_flag_fourteen_days = array(
+    'type' => 'int',
+    'description' => "Sets the value to one when mail is sent to the user",
+    'not null' => TRUE,
+    'default' => '0', 
+  ); 
+
+  db_add_field( 'assigned_device', 'mail_flag_seven_days', $mail_flag_seven_days);
+  db_add_field( 'assigned_device', 'mail_flag_fourteen_days', $mail_flag_fourteen_days);
+ 
+ }
+ /**
+ * Change max_length of Name field
+ */
+function pfe_pip_meetings_update_7065() {
+  $field_name='field_session_content';
+  $new_length='260';
+   $field_table = 'field_data_' . $field_name;
+  $field_revision_table = 'field_revision_' . $field_name;
+  $field_column = $field_name . '_value';
+
+  // Alter value field length in fields table.
+  db_query("UPDATE `{$field_table}` SET `{$field_column}`=SUBSTR(`{$field_column}`, 0, {$new_length})");
+  db_query("ALTER TABLE `{$field_table}` CHANGE `{$field_column}` `{$field_column}` VARCHAR( {$new_length} )");
+  // Alter value field length in fields revision table.
+  db_query("UPDATE `{$field_revision_table}` SET `{$field_column}`=SUBSTR(`{$field_column}`, 0, {$new_length})");
+  db_query("ALTER TABLE `{$field_revision_table}` CHANGE `{$field_column}` `{$field_column}` VARCHAR( {$new_length} )");
+
+  // Update field config with new max length.
+  $result = db_query("SELECT CAST(`data` AS CHAR(10000) CHARACTER SET utf8) FROM `field_config` WHERE field_name = '{$field_name}'");
+  $config = $result->fetchField();
+  $config_array = unserialize($config);
+  $config_array['settings']['max_length'] = $new_length;
+  $config = serialize($config_array);
+  db_update('field_config')
+    ->fields(array('data' => $config))
+    ->condition('field_name', $field_name)
+    ->execute();
+ 
+}
+
+ 

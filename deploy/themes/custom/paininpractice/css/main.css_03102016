@@ -1,0 +1,1186 @@
+body {
+  /* background:url(../images/grid.png) repeat-y center top #fff; */
+  margin:0;
+  padding:0;
+  font-family: 'Open Sans', sans-serif;
+  color:#7c7c7c;
+}
+
+/*added on 21/12/2015. */
+.l-content {
+  min-height:400px;
+}
+.fl {
+  float:left;
+}
+#block-system-main-menu, .main-heading, .l-main, .meeting-callouts, .field-name-field-meeting-agenda table tr:first-child td label, .form-type-select label {
+  font-family: 'Open Sans', sans-serif;
+  /*font-family:'open_sansregular'\0/; for ie8 only*/
+  font-style: normal;
+}
+article {
+  margin-top:30px;
+}
+table tr td {
+  font-size:14px;
+  color:#333;
+  
+}
+.grey-bullet {
+  margin: 0 0 0 17px;
+  padding: 0;
+}
+.grey-bullet li {
+  margin: 0 0 8px 0;
+  padding: 0 0 0 10px;
+}
+/****************************************************************
+Admin  menu
+*****************************************************************/
+.admin-menu .field-type-file.field-name-field-guides.field-widget-file-generic.form-wrapper {
+  clear: both;
+}
+
+/*****************************************************************
+User login  /user page
+*****************************************************************/
+.user-login .form-item {
+  float: left;
+  width: 100%;
+}
+.user-login .form-item .description{
+  visibility:hidden;
+}
+/****************************************************************
+Front page
+*****************************************************************/
+
+.front .l-content.main-login-pg .logo-section {
+  margin-top:48px;
+}
+.front .main-login-pg .welcome-section {
+  margin-top:118px;
+}
+.front .main-login-pg a {
+  color:#f63;
+  text-decoration:none;
+}
+.front  .user-login .description {
+  visibility:hidden;
+}
+.front  .logo-section img {
+  width:417px;
+}
+/****************************************************************
+TOP HEADER REGION
+*****************************************************************/
+.site-logo {
+  padding:20px 0;
+  float:left;
+}
+.main-heading {
+  font-size:28px;
+  color:#666;
+  font-weight:lighter;
+  height:120px;
+  margin:0;
+  display:table-cell;
+  vertical-align:middle;
+}
+/****************************************************************
+MAIN MENU
+*****************************************************************/
+.navigation-wrapper {
+  background:#77024c;
+  float:left;
+  width:100%;
+}
+#block-system-main-menu ul, #block-system-user-menu ul {
+  margin:0;
+  padding:0;
+}
+#block-system-main-menu ul.menu li, #block-system-user-menu ul.menu li {
+  list-style:none;
+  float:left;
+}
+#block-system-main-menu ul.menu li a, #block-system-user-menu ul.menu li a {
+  color:#fff;
+  font-size:14px;
+  text-transform: uppercase;
+  text-decoration: none;
+  font-weight:400;
+  height:60px;
+  display:table-cell;
+  vertical-align:middle;
+  padding:0 18px;
+}
+#block-system-main-menu ul.menu li a.active, #block-system-user-menu ul.menu li a.active {
+  color:#f26937;
+}
+#block-system-main-menu ul.menu li.first a {
+  padding-left:0;
+}
+
+/****************************************************************
+CONTENT REGION
+*****************************************************************/
+.grey-bg {
+  background:url(../images/grey-bg.jpg) repeat-x left top;
+}
+.grey-bg a {
+  color:#f63;
+  text-decoration:none;
+}
+.pink-title {
+color:#77024c;
+font-size:18px;
+font-weight:bold;
+}
+/************** CREATE A MEETING *******************/
+.form-submit,  .multipage-controls-list input.form-submit,.multipage-controls-list input.form-submit:hover, .multipage-controls-list input#edit-submit,.multipage-controls-list input#edit-submit:hover,a.export-list, a.export-list:hover, .registered-gps-operations table tr td a.apply, .registered-gps-operations table tr td a.apply:hover {
+  padding:11px 8px;
+  background:#f63;
+  color:#fff;
+  font-size:16px;
+  text-transform:uppercase;
+  border:0;
+  -webkit-border-radius: 5px; 
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  font-weight:400;
+  margin-right:20px;
+  cursor:pointer;
+  -webkit-appearance:none;
+}
+
+h2.multipage-pane-title {
+  font-weight:normal;
+  font-size: 18px;
+}
+.multipage-controls-list input.form-submit:active {
+  border:none 0;
+}
+.form-submit.form-button-disabled {
+  background:#fc855d;
+  cursor:initial;
+}
+.form-type-select label, #add-device-rep label {
+  color:#7c7c7c;
+  font-size:18px;
+  font-weight:lighter;
+  margin:0 0 15px 0;
+}
+#edit-field-meeting-other.fl, #edit-field-meeting-date {
+  float:left;
+}
+fieldset {
+  border: 0 none;
+  clear: both;
+  padding: 0;
+  margin:0;
+}
+/* #edit-field-meeting-time {
+  float:left;
+} */
+/* fieldset legend {
+  font-weight:bold;
+  padding: 20px 0;
+} */
+.node-meetings-form table {
+  width:100%;
+}
+.node-meetings-form .group-meeting-step3 {
+	float:left;
+	width:100%;
+}
+.node-meetings-form .group-meeting-step3 tr:first-child  label {
+	display: block !important;
+	font-size: 13px;
+	margin:0 0 15px;
+}
+.node-meetings-form .group-meeting-step3  tr:first-child input.form-submit.remove-button {
+  bottom: -28px; 
+
+}
+.node-meetings-form .group-meeting-step3 tr td{
+  padding:0;
+}
+.node-meetings-form .group-meeting-step3 tr td.field-multiple-drag {
+  vertical-align:bottom;	
+  padding:0;
+}
+.node-meetings-form .group-meeting-step3 tr td.field-multiple-drag .tabledrag-handle{
+  margin-bottom:15px;	
+}
+.group-meeting-step3 .field-name-field-meeting-agenda table .form-submit {
+
+}
+/* .node-meetings-form .field-multiple-drag {
+  width:60px;
+  margin:0 10px 0 0;
+}
+.node-meetings-form .field-name-field-facilitator-full-name {
+  float:left;
+  width:220px;
+  margin:0 10px 0 0;
+}
+.node-meetings-form .field-name-field-facilitator-title {
+  float:left;
+  width:60px;
+  margin:0 10px;
+}
+.node-meetings-form .field-name-field-facilitator-email {
+  float:left;
+  width:220px;
+  margin:0 0 0 10px;
+} */
+.node-meetings-form th, .node-meetings-form fieldset legend {
+  background-color: #bbb;
+  box-sizing: border-box;
+  color: #fff;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 18px;
+  padding: 10px;
+  margin: 0 0 20px; /*for legend*/
+  text-align: left;
+  width: 100%;
+}
+.container-inline-date .date-padding {
+  float: none;
+}
+.container-inline-date .form-item, .container-inline-date .form-item input {
+  /* width:auto; */
+  width:100%; /*for node-meetings-form*/
+}
+.node-meetings-form .container-inline-date .description {
+  display:none;
+}
+.node-meetings-form .date-no-float {
+  width:100%;
+}
+.node-meetings-form label.option {
+  font-size:14px;
+}
+.form-item-field-meeting-activity-und {
+  float:left;
+  margin:0;
+}
+.form-item-field-meeting-activity-und {
+  margin:0 0 5px 0;
+}
+.form-type-date-combo {
+  margin-bottom:0;
+}
+.node-meetings-form label {
+  font-size:18px;
+  font-weight:lighter;  
+}
+.node-meetings-form .multipage-panes {
+  width: 620px; /*grid-8*/
+  margin:0; /*alpha omega*/
+}
+.form-item-title {
+  width:300px; /*grid-4*/
+  margin-right:10px; /*alpha*/
+  float:left;
+}
+.node-meetings-form .field-type-text-with-summary {
+  width:300px;
+  margin-left:10px; /*alpha*/
+  float:left;
+}
+#edit-field-meeting-activity::before, #edit-field-meeting-activity::after {
+  content: " ";
+  display: block;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  width: 0;
+  clear:both;
+}
+.node-meetings-form .form-item.form-type-radio {
+  clear: right;
+  float: left;
+  margin-right: 10px;
+}
+.node-meetings-form input {
+  width: 100%;
+}
+.node-meetings-form input.form-submit {
+  width:auto;
+}
+.node-meetings-form  .form-textarea-wrapper textarea {
+  height:100px;
+}
+.node-meetings-form  .group-meeting-step2  .multipage-link-next, .node-meetings-form  .group-meeting-step2  .multipage-link-next:hover {
+  float:right;
+  margin-right:0;
+}
+.form-submit.ajax-processed {
+  margin:10px 0 0 0;
+}
+/* .multipage-button {
+  width:100%;
+} */
+.multipage-controls-list #edit-actions {
+    float: right;
+}
+.field-type-text.form-wrapper, .field-name-field-facilitator-title-name, .field-name-field-speaker-title-name {
+  float: left;
+  margin: 0 13px 0 0;
+  width: 16%;
+}
+.field-type-list-text.field-name-field-facilitator-title-name.field-widget-options-select.form-wrapper  div.selector, .field-name-field-speaker-title-name  div.selector {
+  width:100%;
+}
+#edit-field-speaker-details-und-0-remove-button, .node-meetings-form input.form-submit.remove-button {
+  background: url("../images/remove-icon.png") no-repeat scroll center center;
+  border: 0 none;
+  color: #fff;
+  cursor: pointer;
+  display: block;
+  font-size: 0;
+  height: 45px;
+  margin: 0;
+  padding: 0;
+  text-transform: uppercase;
+  width: 20px;
+}
+
+.node-meetings-form .form-select {
+  width: 100%;
+}
+.node-meetings-form .form-type-select label{
+  display:none;
+}
+.node-meetings-form .field-name-field-meeting-additional-rep {
+  width: 300px;
+  margin:0 0 0 10px;
+  float:left;
+}
+.tabledrag-handle .handle {
+  background: url("../images/move-arrow.png") no-repeat scroll center center;
+}
+.tabledrag-handle {   
+  display: block;
+  height: 40px;
+  width: 50px;
+}
+.tabledrag-handle .handle {
+  width: 35px;
+  margin-top:8px;
+}
+tr.odd td.field-multiple-drag, tr.even td.field-multiple-drag {
+  padding:20px 5px 0 0;
+}
+.field-name-field-meeting-activity.field-widget-options-buttons.form-wrapper {
+  float: left;
+  margin-bottom: 1em;
+  width: 100%;
+}
+.node-meetings-form  .group-meeting-step2 .multipage-link-previous, .node-meetings-form  .group-meeting-step2 .multipage-link-previous:hover {
+  background:#999;
+}
+.node-meetings-form  .group-meeting-step3 #edit-field-meeting-agenda .form-wrapper {
+  width:12%;
+  margin:0 1% 1% 0 !important;
+  float:left;
+}
+
+.node-meetings-form  .group-meeting-step3 div.selector, .node-meetings-form  .group-meeting-step3 div.selector select {
+  width:100%;
+}
+.node-meetings-form  .group-meeting-step3 #edit-actions {
+  float:right;
+  margin:0;
+}
+.node-meetings-form  .group-meeting-step3 #edit-actions #edit-submit {
+  margin:0;
+  background:#f63;
+}
+.node-meetings-form  .group-meeting-step3 .multipage-button {
+  float:left;
+  margin:0;
+  width:auto;
+}
+.node-meetings-form .group-meeting-step3 input.form-submit.remove-button {
+ /* bottom: 7px; */
+ bottom: 0;
+}
+.node-meetings-form  .group-meeting-step3 .multipage-button input {
+  background:#999;
+  -webkit-border-radius: 5px; 
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+#edit-field-venue-capacity {
+  display:none;
+}
+/************** MEETING SUMMARY *******************/
+.meeting-details {
+  background:#f1f1f1;
+  display:table-cell;
+  float:none;
+  padding:30px 20px;
+  vertical-align:top;
+  -webkit-border-radius: 5px; 
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+.meeting-detail-wrapper {
+  display:table;
+}
+.meeting-details .col-1, .meeting-details .col-2 {
+  float:left;
+  width:49%;
+}
+.meeting-details .col-1 .field--label-inline, .meeting-details .col-2 .field--label-inline {
+  margin:0 0 25px 0;
+}
+.meeting-callouts {
+  text-align:center;
+  display:table-cell;
+  vertical-align:top;
+}
+.pfe-pip-meetings-operations {
+  text-align:center;
+  display:table-cell;
+}
+.meeting-callouts ul li {
+  width:100%;
+}
+.meeting-callouts a, .meeting-callouts .form-submit, .pfe-pip-meetings-operations a {
+  text-align:center;
+  color:#f63;
+  font-size:16px;
+  font-weight:600;
+  /* margin:16px 0; */
+  text-decoration:none;
+  float:left;
+  width:100%;
+  padding:16px 0;
+  background:transparent;
+  cursor:pointer;
+  text-transform: uppercase; /**Meetings tab**/
+  font-family: 'Open Sans', sans-serif;
+}
+.field-name-field-meeting-agenda {
+  width:780px;
+}
+.field-name-field-meeting-agenda table{
+  width:100%;
+}
+
+tr.odd,tr.even {
+  background-color: transparent;
+}
+.draggable.odd {
+  background: #fefefe;
+}
+.draggable.even {
+  background: #fafafa;
+}
+tr.even td, tr.odd td {
+  padding: 20px 0;
+  vertical-align:top;
+}
+tr.even, tr.odd {
+/*   background-color: transparent; */
+  position:relative;
+}
+.field-name-field-meeting-agenda .tabledrag-toggle-weight {
+  display:none;
+}
+.field-name-field-meeting-agenda .field-add-more-submit, .node-meetings-form  .field-add-more-submit {  
+  border:0;
+  /* height:45px; 
+  padding:0 20px 0 40px;  
+  background:url(../images/add-more-icon.png) no-repeat 10px center #59c95e; 
+  color:#fff; */
+  font-size:16px;
+  cursor:pointer;
+  margin:10px 0 0 0;
+  height: auto;
+  margin: 0 0 10px;
+  padding: 0 0 0 30px;
+  background:url(../images/add-more-icon.jpg) no-repeat 10px center; 
+  color:#59c95e;
+}
+.field-name-field-meeting-agenda table .field-multiple-drag {
+  width: 60px;
+  padding-right:8px;
+}
+.field-name-field-agenda-start {
+  margin-left:10px;
+}
+.field-name-field-agenda-start, .field-name-field-agenda-end {
+  width: 140px;
+  /* border:solid 1px red; */
+  float:left;
+  margin:0 10px;
+}
+ .field-name-field-agenda-details {
+  width: 300px;
+  /* border:solid 1px blue; */
+  margin:0 0 0 10px;
+  float:left;
+}
+.container-inline-date .form-item input, .container-inline-date .form-item select, .container-inline-date .form-item option {
+  margin-right: 0;
+}
+.field-name-field-meeting-agenda .field-label {
+  display: none;
+}
+.container-inline-date .form-item input, .field-name-field-agenda-details input {
+  width: 100%;
+  box-sizing:border-box;
+  border: 0 none;
+  background:#f1f1f1;
+  height:45px;
+  line-height:45px;
+}
+.field-name-field-meeting-agenda label {
+  display:none;
+}
+.field-name-field-meeting-agenda table tr  td{
+  padding-bottom:20px;
+}
+.field-name-field-meeting-agenda table tr:first-child td label {
+  display:block;
+  font-size:18px;
+  font-weight:lighter;
+  color:#7c7c7c;
+}
+.date-no-float {
+  width:100%;
+}
+.container-inline-date > .form-item {
+  margin-right:0;
+}
+.field-name-field-meeting-agenda .description {
+  display:none;
+}
+.field-name-field-meeting-agenda table .form-submit {
+  background: transparent none repeat scroll 0 0;
+  bottom: 30px;
+  /*right:42px;
+  position: absolute; */
+  right:-5px;
+  position: relative;
+  vertical-align: top;
+  border:0;
+  background:url(../images/remove-icon.png) no-repeat center center;
+  width:18px;
+  height:18px;
+  font-size:0;
+  display:block;
+}
+.additional-rep .field__label, .facilitators .field__label, .speaker-details .field__label, .representatives .field__label {
+  width:100%;
+}
+.representatives .field__items {
+  width:100%;
+}
+/* .supporting_rep {
+  border: medium solid;
+  float: left;
+  margin: 25px 0 0;
+} */
+}
+.meeting-detail-wrapper .field__item.even {
+    word-wrap: break-word;
+}
+/************** MEETINGS *******************/
+
+.section-view-meetings table, .section-view-rep-meetings table, .registered-gps-operations table, .add-device table, .view-user table {
+  width:100%;
+}
+.color-code {
+  width:25px;
+  height:25px;
+  display:table-cell;
+  color:transparent;  
+}
+.main-heading-wrap {
+  margin-bottom:44px;
+}
+.color-mapping {
+  margin:30px 0;
+}
+.color-txt {
+  font-size:16px;
+  color:#7c7c7c;
+  display:table-cell;
+  padding:0 40px 0 16px;
+  line-height:25px;
+}
+.pink-indicator {
+  background:#e4ccdb;
+}
+.orange-indicator {
+  background:#ffe0d6;
+}
+.grey-indicator {
+  background:#f1f1f1;
+}
+.upcomin-indicator {
+  background:#fdf5e6;
+}
+.registered-gps-operations table, .add-device table {
+  /* margin:20px 0 0 0; */
+  border-top:solid 20px #fff;
+}
+.registered-gps-operations table tr td a.apply, .registered-gps-operations table tr td a.apply:hover {
+  font-size: 11px;
+  margin-right: 0;
+  padding: 5px;
+}
+.section-view-meetings table th, .section-view-rep-meetings  table th, .registered-gps-operations table th, .add-device table th, .resources-table-wrap table th, .view-user table th {
+  color:#fff;
+  font-size:16px;
+  font-weight:normal;
+  height:54px;
+  vertical-align:middle;
+  background:#666;
+  padding:0 18px;
+}
+.section-view-meetings table th, .section-view-rep-meetings  table th, .registered-gps-operations table th, .add-device table th, .resources-table-wrap table th, .view-user table th {
+  font-size:13px;
+
+}
+.section-view-meetings table td, .section-view-rep-meetings  table td, .registered-gps-operations table td, .add-device table td, .resources-table-wrap table tr td, .view-user table tr td, .admin-device-status table tr td {
+  padding:18px;
+}
+.registered-gps-operations table th, .add-device table th {
+  padding: 0 9px;
+  /* white-space: pre; */
+}
+.registered-gps-operations table td, .add-device table td {
+  max-width: 80px;
+  padding: 9px;
+  word-wrap: break-word;
+}
+.registered-gps-operations table th:last-child {
+  /* padding: 0; */ /* individual meeting page - Registered GPs table*/
+  width: 250px;
+  vertical-align:middle; /*/view-gp-list page*/
+}
+.registered-gps-operations table td:last-child {
+  width: 250px;
+  vertical-align:top; /*/view-gp-list page*/
+}
+.registered-gps-operations table td.empty.message {
+  height:30px;
+}
+.gp-registered-txt {
+  margin:0 0 30px 0;
+}
+.section-view-meetings table td a, .section-view-rep-meetings table td a, .registered-gps-operations table td  a, .view-user table td  a {
+  color:#333;
+  font-size:14px;
+}
+.meeting-edit {
+  background: #e4ccdb !important;
+}
+.meeting-cancel{
+  background: #ffe0d6 !important;
+}
+.meeting-complete {
+  background: #f1f1f1 !important;
+}
+.meeting-upcoming {
+  background: #fdf5e6 !important;
+}
+.meeting-detail-wrapper .field--name-field-meeting-status {
+  display:none;
+}
+.views-field-field-meeting-lead-rep a {
+  cursor: default;
+}
+/************** Users *******************/
+.view-user {
+  margin: 30px 0 0;
+}
+/************** REGISTRATION FORM *******************/
+#registration-form .form-wrapper{
+  width:300px;
+}
+#registration-form .form-text{
+  width:100%;
+}
+#registration-form #edit-field-registrant-terms {
+  float:left;
+  width:100%;
+}
+#registration-form #edit-field-agree.form-wrapper {
+  float: left;
+  width: 100%;
+}
+#registration-form #edit-field-agree.form-wrapper label{
+  display:none;
+}
+#registration-form #edit-field-agree.form-wrapper label.option{
+  display:inline;
+}
+#registration-form #edit-cancel {
+  float:left;
+  padding:15px 8px;
+  background:#999;
+  color:#fff;
+  font-size:16px;
+  text-transform:uppercase;
+  border:0;
+  -webkit-border-radius: 5px; 
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  font-weight:400;
+  margin-right:20px;
+  cursor:pointer;
+}
+#registration-form #edit-actions {
+  float: left;
+  width:100%;
+}
+#registration-form #edit-submit {
+  float: right;
+  margin:0;
+}
+#registration-form  .form-item-user input, #registration-form  .form-item-anon-mail{
+  width:300px;
+}
+.messages--error, tr.error {
+  background-color: #f63;
+  color: white;
+  width: 100%;
+  box-sizing:border-box;
+}
+.group-meeting-step2 .form-submit.multipage-link-next {
+  display: none; 
+} 
+/************** Representative Registration *******************/
+#pfe-pip-meetings-representative-registration .form-item {
+  width:300px;
+}
+#pfe-pip-meetings-representative-registration .form-text {
+  width:100%;
+}
+#pfe-pip-meetings-representative-registration .form-item-user-type label, #pfe-pip-meetings-representative-registration .form-item-user-type .description{
+  display:none;
+}
+#pfe-pip-meetings-representative-registration tr td {
+  vertical-align: middle;
+}
+/****************************************************************
+RESOURCES
+*****************************************************************/
+.resources-table-wrap table {
+  width:100%;
+}
+.resources-table-wrap table a{
+  font-weight:bold;
+}
+.resource-title {
+ font-weight:bold;
+}
+.resource-desc {
+  font-style:italic;
+  font-size:13px;
+}
+/****************************************************************
+FOOTER REGION
+*****************************************************************/
+.footer-container {
+  font-family:'Arial W01 Light',arial;
+  font-size:12px;
+  color:#999;
+  margin-top:30px;
+}
+.footer-links {
+  margin:0 0 20px 0;
+}
+.footer-links a {
+  color:#666;  
+  padding:0 18px 0 0;
+  margin:0 18px 0 0;
+  border-right:solid 1px #666;
+  text-decoration:none;
+}
+.footer-links a.last {
+  color:#666;
+  padding:0;
+  margin:0 18px 0 0;
+  border-right:0;
+}
+.footer-links a:hover {
+  text-decoration:underline;
+}
+.eliquis-logo-container {
+  text-align:right;  
+}
+.form-text {
+  background:#f1f1f1;
+  height:45px;
+  line-height:45px;
+  border:0;
+  box-sizing:border-box;
+  padding:0 10px;
+  -webkit-border-radius: 5px; 
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  color:#7c7c7c;
+}
+.l-footer {
+  border-top: solid 1px #ebebeb;
+  margin-top:60px;
+  min-height:175px;
+}
+/****************************************************************
+Custom input elements
+*****************************************************************/
+div.selector {
+  width:299px;
+  height:45px;
+  background:#f1f1f1 none;
+  padding:0;
+  -webkit-border-radius: 5px; 
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+div.selector span, div.selector.hover span, div.selector.active span, div.selector.focus span {
+  background:#f1f1f1 url("../images/selectbox-dwn-arrow.png") no-repeat right center;
+  width:100%;
+  height:45px;
+  line-height:45px;
+  padding:0 0 0 10px;
+  color:#7c7c7c;
+}
+div.selector select {
+  width:100%;
+  height:45px;
+}
+div.selector option {
+  padding:0 0 0 10px;   
+}
+
+/***************************************************************** 
+------------------------------------------------------------------ 
+MEDIA QUERY - iPad CSS 
+------------------------------------------------------------------ 
+*****************************************************************/
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px), only screen and (min-width : 768px) and (max-width : 1024px){
+  body {
+    /* background:#666; */
+  }
+}
+/***************************************************************** 
+------------------------------------------------------------------ 
+Temporary CSS
+------------------------------------------------------------------ 
+*****************************************************************/
+
+/* .field-name-field-meeting-state, .field-name-field-meeting-lead-rep, .form-item-title {
+  float:left;
+} */
+/* .multipage-counter {
+  display:none;
+}
+.date-no-float {
+    width: 200px;
+}
+div.selector {
+  width:100%;
+}
+.container-inline-date .form-item, .container-inline-date .form-item input {
+    width: auto;
+}
+.start-date-wrapper, .end-date-wrapper {
+  float:left;
+} */
+.multipage-counter {
+  display:none;
+}
+.registration-who-msg {
+  display: none;
+}
+
+
+.field-name-field-registrant-attended {
+  display: none;
+}
+.form-item-field-registrant-recieve-sms-und > label {
+  display: none;
+}
+.form-item-field-registrant-terms-und > label {
+  display: none;
+}
+
+.form-item-field-registrant-title-und > label {
+  display: none;
+}
+.form-item-field-registrant-state-und > label {
+  display: none;
+}
+.node-meetings-form .tabledrag-toggle-weight-wrapper { display:none; }
+
+.field-name-field-meeting-agenda-hrs {
+  float: left;
+  width: 50%;
+  
+}
+
+.field-name-field-agenda-details {
+  clear: both;
+  margin-top: 11px !important;
+}
+
+.field-name-field-agenda-details {
+/*   clear: both;
+  margin-top: 11px !important;
+  width: 88% !important; */
+  width:37% !important;
+  clear: none;
+}
+
+.field-name-field-meeting-agenda-hrs label {
+  display: none !important;
+}
+.field-name-field-meeting-agenda-min  label {
+  display: none !important;
+}
+.field-name-field-meeting-agenda-end-hour {
+  float: left;
+  width: 50%;
+  margin-top: 11px !important;
+}
+.field-name-field-meeting-agenda-end-min {
+margin-top: 11px !important;
+}
+.field-name-field-meeting-agenda-end-hour  label {
+display: none !important;
+}
+
+.field-name-field-meeting-agenda-end-min label {
+display: none !important;
+}
+#edit-field-meeting-registration {
+  display: none;
+}
+.hid  { display:none !important; }
+.field-name-field-registrant-email {
+  display: none !important;
+}
+.field-name-field-meeting-status {  display: none !important; }
+.field-name-field-metting-company{ display: none !important; }
+.form-item-user-type label { display: none !important;  }
+
+.entity-registration .field-label, .entity-registration .field__label, .entity-registration .field__items {
+  float: left;
+}
+.entity-registration .field {
+  float: left;
+  width: 100%;
+}
+.ctools-modal-content, #modal-content {
+  height:auto !important;
+}
+div.modal-forms-modal-content .modal-header {
+  padding: 15px 15px 0 18px;
+}
+.popups-container #edit-actions .form-submit, .popups-container #edit-actions #edit-cancel {
+  margin-right:4px !important;
+}
+#modal-content #edit-cancel {
+	padding: 10px 8px;	
+}
+div.ctools-modal-content .modal-content {
+  padding:10px 0 15px 20px !important;
+}
+#modal-content .confirmation #edit-actions {
+  margin:10px 0 0 0;
+  float:left;
+  width:100%;
+}
+#modal-content .confirmation a, #modal-content .confirmation a.no-button:hover {
+  background: #999;
+  border: 0 none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 400;
+  margin-right: 20px;
+  padding: 15px 8px;
+  text-transform: uppercase;
+  text-decoration:none;
+}
+.ajax-progress .throbber {
+  position:absolute;
+  display:inline-block;
+  top:50%;
+  left:50%;
+  background: transparent url('../images/loader.gif') no-repeat !important;
+  width:16px;
+  height:16px;
+}
+.feed-icon {
+  margin:10px 0;
+  
+  
+}
+.feed-icon a {
+	padding:15px 8px;
+  background:#f63;
+  color:#fff;
+  font-size:16px;
+  text-transform:uppercase;
+  border:0;
+  -webkit-border-radius: 5px; 
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  font-weight:400;
+  margin-right:20px;
+  cursor:pointer;
+  -webkit-appearance:none;
+  margin-top:15px;
+	margin-bottom:15px;
+}
+.feed-icon a::after {
+  content: "Download";
+}
+.feed-icon img {	
+  display:none;
+}
+.user-profile-category-history {
+  display:none;
+}
+.user-profile .field--label-above{
+  float:left;
+  width:100%;  
+}
+.user-profile .field--label-above .field__label, .user-profile .field--label-above .field__items {
+  float:left; 
+}
+.meeting-duration .meet-duration{
+  float:left;
+}
+.footer-container a[href^="tel"] { 
+  color: #999; 
+  text-decoration: none;
+} 
+.views-exposed-form .views-exposed-widget .form-submit {
+  margin-top: 0;
+}
+#views-exposed-form-view-meetings-page .form-item-title {
+  float: left;
+  margin-right: 10px;
+  width: auto;
+}
+#views-exposed-form-view-meetings-page  .views-exposed-form .views-exposed-widget {
+  float: left;
+  padding: 0;
+}
+#views-exposed-form-view-meetings-page  .form-submit, #views-exposed-form-view-users-block-1  .form-submit {
+  padding: 11px 8px;
+}
+.add-device-rep input.form-text {
+  width: 300px !important;
+  margin-bottom:1em;
+}
+.add-device-rep .description {
+  display:none;
+}
+.add-device-rep .form-textarea-wrapper {
+  width: 300px;
+}
+
+/******************Bulk Operations Hiding******************/
+ .bulk-operation-checkbox, #views-form-rep-assign-devices-block .views-field-views-bulk-operations,#views-form-warehouse-device-report-block-1 .views-field-views-bulk-operations,#views-form-rep-assign-devices-page-1 .views-field-views-bulk-operations{
+  display:none;
+} 
+.vbo-views-form legend {
+  display:none;
+}
+#views-form-rep-assign-devices-block > div, #views-form-warehouse-device-report-block-1 > div ,#views-form-rep-assign-devices-page-1 > div {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+#views-form-rep-assign-devices-block > div #edit-select, #views-form-warehouse-device-report-block-1 > div #edit-select,#views-form-rep-assign-devices-page-1 > div #edit-select {
+  -webkit-order: 2;
+  -moz-order: 2;
+  -ms-order: 2;
+  order: 2;
+margin:0 0 15px 0;
+}
+#views-form-rep-assign-devices-block > div table, #views-form-warehouse-device-report-block-1 > div table,#views-form-rep-assign-devices-page-1 > div table {
+  -webkit-order: 1;
+  -moz-order: 1;
+  -ms-order: 1;
+  order: 1;
+}
+
+/*hiding the view on add meetings page*/ 
+.page-node-add-meetings .view-admin-device-status-view 
+{ display: none;
+}
+
+
+/*device assigned color change*/
+.meeting-10 {
+  background: #e4ccdb !important;
+}
+.meeting-11 {
+  background: #f1f1f1 !important;
+}
+#views-exposed-form-admin-device-status-view-block-1 .description {
+  display: none;
+}
+.node-resources-form #edit-field-description {
+  float: none;
+}
+.page-view-meetings .grey-bg a.active{
+    color: #fff;
+}
+/*For disable select List*/
+div.selector.disabled span {
+    color: #7c7c7c;
+}  
+.l-region--navigation{
+  width: 980px;
+    float: left;
+}
+#block-system-main-menu ul.menu li a, #block-system-user-menu ul.menu li a{
+      padding: 0 12px;
+}
+.grey-bg .form-cert-button-disabled a {
+  padding: 11px 8px;
+    background: #fc855d;
+    color: #fff;
+    font-size: 16px;
+    text-transform: uppercase;
+    border: 0;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    font-weight: 400;
+    margin-right: 20px;
+    cursor: initial;
+    -webkit-appearance: none;
+    pointer-events: none;
+}
+/*Registration Autocompute field*/
+html.js .form-autocomplete{
+background-image:url("../images/throbber1.png");
+background-position:99% 0;
+}
+html.js .form-autocomplete.throbbing{
+background-image:url("../images/throbber-new.gif");
+background-position:99.5% -4px;
+}

@@ -1,0 +1,66 @@
+<?php
+function pfe_pip_upload_schema() {
+  $schema['pfe_document_upload_test'] = array(
+   'description' => t('Stores fids for LRF and LOO.'),
+   'fields' => array(
+     'id' => array(
+       'description' => 'Id',
+       'type' => 'serial',
+       'unsigned' => TRUE,
+       'not null' => TRUE,
+      ),
+      'deviceid' => array(
+        'type' => 'int',
+        'length' => '100',
+        'not null' => TRUE,
+        'description' => 'Device id',
+        'default' => 0,
+      ),
+      'gpid' => array(
+        'type' => 'int',
+        'length' => '100',
+        'not null' => TRUE,
+        'description' => 'Device id',
+        'default' => 0,
+      ),
+      'loan_type' => array(
+        'description' => 'loan type',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ), 
+      'sg_lrf_id' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'description' => 'System genrated LRF fname.',
+      ),
+      'com_lrf_id' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'description' => 'Completed LRF fname.',
+        'default' => 0,
+      ),
+      'sg_loo_id' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'description' => 'System genrated LOO fname.',
+        'default' => 0,
+      ),
+      'com_loo_id' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'description' => 'Completed LOO fname.',
+        'default' => 0,
+      ),
+    ),
+    'foreign keys' => array(
+      'user_ref' => array(
+        'table' => 'assigned_device',
+        'columns' => array('deviceid' => 'deviceid'),
+      ),
+    ),
+    'primary key' => array('id'),
+  );
+  return $schema;
+}

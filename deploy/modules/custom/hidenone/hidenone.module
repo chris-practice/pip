@@ -1,0 +1,226 @@
+<?php
+/**
+ * Implements hook_form_alter().
+ */
+
+function hidenone_form_alter(&$form, $form_state, $form_id) {
+  /*Validation on Registration Filed*/
+  /*if($form_id=="registration_form"){
+    $qi_cpd_id = $form_state['input']['field_qi_cpd_or_acrrm']['und']['0']['value'];
+    $registration_id=isset($form['#entity']->registration_id)?$form['#entity']->registration_id:'';
+    $qi_cpd = db_query("SELECT field_qi_cpd_or_acrrm_value from field_data_field_qi_cpd_or_acrrm WHERE field_qi_cpd_or_acrrm_value = '$qi_cpd_id' && entity_id!='$registration_id'")->rowCount();
+    if (isset($qi_cpd)&&$qi_cpd!='0') {
+      form_set_error('field_qi_cpd_or_acrrm', t('The QI&CPD or ACRRM is already registered.'));
+    } 
+
+    }*/
+  global $user;
+  $vocabulary_id = taxonomy_vocabulary_machine_name_load('state')->vid; 
+  if($form_id == 'user_login'){
+    $form['name']['#title'] = t("Email address");   
+  }
+  if($form_id == 'registration_form' && $form['#entity']->type=='meeting_registration'){
+    if(empty($form['#entity']->registration_id)){
+       drupal_set_title(t('Register GP for meeting'));
+       $form['actions']['submit']['#value'] = t('Register');
+       $form['state']['#title'] = t('Status');
+    }
+     else {
+       drupal_set_title(t('Edit GP'));
+       $form['actions']['submit']['#value'] = t('Save');
+       $form['state']['#title'] = t('Status');
+     }
+
+  }elseif($form_id == 'registration_form' && $form['#entity']->type=='screening_pack_registration'){
+    $GLOBALS['user'];
+    if(empty($form['#entity']->registration_id)){
+       drupal_set_title(t('Register GP for screening pack'));
+       $form['actions']['submit']['#value'] = t('Register');
+       $form["field_author_uid"][LANGUAGE_NONE][0]['value']['#default_value'] = $user->uid;
+       $user = user_load($user->uid);
+       $form["field_author_name"][LANGUAGE_NONE][0]['value']['#default_value'] = $user->field_user_name['und'][0]['value'] .' '. $user->field_user_surname['und'][0]['value'];
+    }
+     else {
+       drupal_set_title(t('Edit GP'));
+       $form['actions']['submit']['#value'] = t('Save');
+       $user_data = user_load($form['#entity']->author_uid);
+       $form["field_author_uid"][LANGUAGE_NONE][0]['value']['#default_value'] = $form['#entity']->author_uid;
+       $form["field_author_name"][LANGUAGE_NONE][0]['value']['#default_value'] = $user_data->field_user_name['und'][0]['value'] .' '. $user_data->field_user_surname['und'][0]['value'];      
+     }
+  }
+  elseif($form_id == 'registration_form' && $form['#entity']->type == 'alivecor_registration'){
+    $GLOBALS['user'];
+    if(empty($form['#entity']->registration_id)){      
+       drupal_set_title(t('Register GP for Alivecor'));
+       $form['actions']['submit']['#value'] = t('Register');
+       $form['#attributes'] = array('class' => 'alivecor_form');
+       $form["field_author_uid"][LANGUAGE_NONE][0]['value']['#default_value'] = $user->uid;
+       $user = user_load($user->uid);
+       $form["field_author_name"][LANGUAGE_NONE][0]['value']['#default_value'] = $user->field_user_name['und'][0]['value'] .' '. $user->field_user_surname['und'][0]['value'];
+    } else {
+       drupal_set_title(t('Edit GP'));
+       $form['actions']['submit']['#value'] = t('Save');
+       $form['#attributes'] = array('class' => 'alivecor_form');
+       $user_data = user_load($form['#entity']->author_uid);
+       $form["field_author_uid"][LANGUAGE_NONE][0]['value']['#default_value'] = $form['#entity']->author_uid;
+       $form["field_author_name"][LANGUAGE_NONE][0]['value']['#default_value'] = $user_data->field_user_name['und'][0]['value'] .' '. $user_data->field_user_surname['und'][0]['value'];      
+     
+     }
+  }
+  
+  if($form_id == 'meetings_node_form'){
+    $form['field_lead_rep_phone']['#access'] = FALSE;;
+    $form['field_lead_support_rep_phone']['#access'] = FALSE;; 
+
+  $form['field_meeting_agenda']['#access'] = FALSE;
+
+  drupal_add_js(drupal_get_path('module', 'hidenone') . '/hidenone.js'); 
+  $tid = taxonomy_get_tree($vocabulary_id);  
+  $form['field_state']['und']['#options']['_none'] = '- State - ';
+  $form['field_meeting_type']['und']['#options']['_none'] = '- Meeting Type -';
+  $form['field_meeting_lead_rep']['und']['#options']['_none'] = '- Lead Rep -';
+  $form['field_meeting_module']['und']['#options']['_none'] = '- Module -';
+  $form['field_meeting_title']['und']['#options']['_none'] = '- Meeting Title -';
+  $form['field_meeting_time']['und']['#options']['_none'] = '- Meeting Time -';
+  $form['field_meeting_additional_rep']['und']['#options']['_none'] = '- Additional Rep(s) -';
+  $form['field_supporting_rep']['und']['#options']['_none'] = '- Supporting Rep -';  
+  $form['changed']['#default_value'] = time() + 300;
+  }
+ 
+}
+
+function hidenone_action_info() {
+    return array(
+      'hidenone_set_action' => array( // declare the function name to be used. Replace the name with your function name
+        'type' => 'node', // can be node,comment,entity etc
+        'label' => t('Device status delivered'), // the name of the operation which is displayed to the user.
+        'configurable' => FALSE,
+        'pass rows' => TRUE, // this will ensure that the entire views row is passed as part of the context in your action callback.
+      ),
+      'hidenone_set_return_device' => array( // declare the function name to be used. Replace the name with your function name
+        'type' => 'node', // can be node,comment,entity etc
+        'label' => t('Device returned'), // the name of the operation which is displayed to the user.
+        'configurable' => FALSE,
+        'pass rows' => TRUE, // this will ensure that the entire views row is passed as part of the context in your action callback.
+      ),      
+    );
+}
+
+ function hidenone_set_action($node, $context = array()) {  
+  $device_id = $node->field_device_id[LANGUAGE_NONE][0]['value'];
+  $unique_val = $node->field_unique_value[LANGUAGE_NONE][0]['value'];
+  $device_status = db_select('assigned_device', 'assign');
+  $device_status->fields('assign', array('deliveredstatus'));
+  $device_status->condition('deviceid',$device_id,'=');
+  $device_status->condition('unique_val',$unique_val,'=');
+  $device_status_result = $device_status->execute()->fetchAssoc();
+  $status = $device_status_result['deliveredstatus']; 
+  if($status == '1'){
+   $query = db_update('assigned_device')
+    ->fields(array('deliveredstatus' => '0'))
+    ->condition('deviceid',$device_id)
+    ->condition('unique_val',$unique_val)
+    ->execute();
+	$node_id = $node->nid;
+	$updated_node = node_load($node_id);
+	$updated_node->type = "add_device";
+	$updated_node->field_delivered_status[LANGUAGE_NONE][0]['value'] = '0';
+	node_save($updated_node);
+  }
+  else{
+     $query = db_update('assigned_device')
+    ->fields(array('deliveredstatus' => '1'))
+    ->condition('deviceid',$device_id)
+    ->condition('unique_val',$unique_val)
+    ->execute();
+    
+    $node_id = $node->nid;
+    $updated_node = node_load($node_id);
+    $updated_node->type = "add_device";
+    $updated_node->field_delivered_status[LANGUAGE_NONE][0]['value'] = '1';
+    node_save($updated_node);
+  }
+  
+}
+  
+  function hidenone_set_return_device($node, $context = array()) {  
+  $title = $node->title;
+  $device_id = $node->field_device_id[LANGUAGE_NONE][0]['value'];
+  $unique_val = $node->field_unique_value[LANGUAGE_NONE][0]['value'];
+  
+  $device_status = db_select('assigned_device', 'assign');
+  $device_status->fields('assign', array('returnstatus'));
+  $device_status->condition('deviceid',$device_id,'=');
+  $device_status->condition('unique_val',$unique_val,'=');
+  $device_status_result = $device_status->execute()->fetchAssoc();
+  $status = $device_status_result['returnstatus']; 
+  
+  $device_delivered = db_select('assigned_device', 'assign');
+  $device_delivered->fields('assign', array('deliveredstatus'));
+  $device_delivered->condition('deviceid',$device_id,'=');
+  $device_delivered->condition('unique_val',$unique_val,'=');
+  $device_delivered_result = $device_delivered->execute()->fetchAssoc();
+  $delivered_result = $device_delivered_result['deliveredstatus'];  
+  if($delivered_result == 1){ 
+  if($status == '1'){ 
+    $query = db_update('assigned_device')
+    ->fields(array('returnstatus' => '0'))
+    ->condition('deviceid',$device_id)
+    ->condition('unique_val',$unique_val)
+    ->execute();
+        
+    $node_id = $node->nid;
+    $updated_node = node_load($node_id);
+    $updated_node->type = "add_device";
+    $updated_node->field_return_status[LANGUAGE_NONE][0]['value'] = '0';
+    node_save($updated_node);
+  }
+  else{
+     $query = db_update('assigned_device')
+    ->fields(array('returnstatus' => '1'))
+    ->condition('deviceid',$device_id)
+    ->condition('unique_val',$unique_val)
+    ->execute();
+    
+	$node_id = $node->nid;
+	$updated_node = node_load($node_id);
+	$updated_node->type = "add_device";
+	$updated_node->field_return_status[LANGUAGE_NONE][0]['value'] = '1';
+	node_save($updated_node);
+  }
+ }
+else
+form_set_error('device_delivery', t('Device has not yet been delivered')); 
+  
+  $device_assign_status = db_select('assigned_device', 'assign');
+  $device_assign_status->fields('assign', array('deviceid'));
+  $device_assign_status->condition('deliveredstatus','1','=');
+  $device_assign_status->condition('returnstatus','1','=');
+  $device_assign_status->condition('deviceid',$device_id,'=');
+  $device_assign_status->condition('unique_val',$unique_val,'=');
+  $device_assign_status_result = $device_assign_status->execute()->fetchAll(PDO::FETCH_ASSOC);
+  
+  if(count($device_assign_status_result)>0){
+   $query = db_update('devices')
+    ->fields(array('assignstatus' => '0'))
+    ->condition('deviceid',$device_id)
+    ->execute();
+  }
+  else{
+   $query = db_update('devices')
+    ->fields(array('assignstatus' => '1'))
+    ->condition('deviceid',$device_id)
+    ->execute();
+  }
+}
+
+
+function hidenone_node_submit($node, $form, &$form_state){
+  $lead_rep_uid=$node->field_meeting_lead_rep[LANGUAGE_NONE][0]['uid'];
+  $rep_user=user_load($lead_rep_uid);
+  $node->field_lead_rep_phone[LANGUAGE_NONE][0]['value']=$rep_user->field_phone[LANGUAGE_NONE][0]['value'];
+
+  $support_rep_uid=$node->field_supporting_rep[LANGUAGE_NONE][0]['uid'];
+  $rep_support_user=user_load($support_rep_uid);
+  $node->field_lead_support_rep_phone[LANGUAGE_NONE][0]['value']=$rep_support_user->field_phone[LANGUAGE_NONE][0]['value'];
+  }

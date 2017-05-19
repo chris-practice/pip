@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the pfe_pip_view_assign_devices feature.
+ */
+
+include_once 'pfe_pip_view_assign_devices.features.inc';

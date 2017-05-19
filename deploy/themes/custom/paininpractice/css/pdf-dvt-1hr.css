@@ -1,0 +1,350 @@
+body, div, dl, dt, dd, h1, h2, h3, h4, h5, h6, p, pre, code, blockquote {
+	margin:0;
+	padding:0;
+	border-width:0;
+}
+td, th {
+	border:0;
+}
+body {
+	-epub-hyphens:auto;
+  font-family: /*'FlamaBas',*/sans-serif;
+}
+
+#pdf-dvt-page-1 {
+width:820px;
+page-break-inside: avoid !important;
+}
+.page1-bg-btm {
+width:820px;
+height:147px;
+display:block;
+}
+.title-wrapper {
+  height:275px;
+}
+.title-wrapper .banner-title1 {
+  font-size:30px;
+  line-height:28px;
+  color:#76004B;
+  padding:65px 0 0 310px;
+  font-family: /*'FlamaBas',*/sans-serif;
+}
+.title-wrapper .banner-title1 span {
+  font-size:30px;
+  line-height:28px;
+  color:#F26A38;
+}
+#pdf-dvt-page-1 .title-wrapper .author {
+  font-size:11px;
+  line-height:19px;
+  color:#76004B;
+  padding:0 0 0 320px;
+  font-family: /*'FlamaBas',*/sans-serif;
+}
+.pink-bar {
+  text-align: center;
+  height:122px;
+  padding:23px 0 0 0;
+}
+.pink-bar .orange-title {
+  font-size:29px;
+  line-height:25px;
+  color:#F26A38;
+  font-family: /*'FlamaBas',*/sans-serif;
+  margin: 0 0 3px;
+}
+.pink-bar .white-title {
+  font-size:23px;
+  line-height:32px;
+  color:#fff;
+  font-family: /*'FlamaBas',*/sans-serif;
+}
+.tbl-wrapper {
+  width:760px;
+  margin:0 auto;
+  font-size:14px;
+  /* line-height:43px; */
+  color:#F26A38;
+  padding:10px 0 0 0;
+}
+.date, .venue {
+  padding-bottom:15px;
+}
+.tbl-wrapper .venue, .tbl-wrapper .rvsp-dead, .tbl-wrapper .presenter, .tbl-wrapper .facilitators {
+  padding-top:20px;
+}
+
+.tbl-wrapper .tbl-label {
+  font-size:16px;
+  line-height:14px;
+  color:#F26A38;
+  font-weight:bold;
+}
+.tbl-wrapper .info {
+  font-size:14px;
+  line-height:14px;
+  color:#000;
+  
+}
+.tbl-wrapper td.tbl-label.bms-repr {
+  width:280px;
+}
+.tbl-wrapper td.tbl-label.ur-presenter {
+  width:160px;
+}
+.orange-text {
+  font-size:19px;
+  color:#F26A38;
+  font-family: /*'FlamaBas',*/sans-serif;
+  text-align:center;
+  line-height: 20px;
+  margin: 10px auto 0;
+  width: 750px;
+}
+.maroon-text {
+  color:#76004b;
+  font-size:16px;
+  font-family: /*'FlamaBas',*/sans-serif;
+  text-align:center;
+  line-height: 16px;
+  margin: 30px auto;  
+}
+.maroon-bg {
+  background:#76004b;
+  width:780px;
+  margin:0 auto 15px auto;
+  padding:10px 15px 15px 15px;
+  height:50px;
+  text-align:center;
+}
+.mob-text {
+text-align:center;
+line-height:26px;
+} 
+.mobile-icon-img {
+  margin:0 auto 10px;
+  width:700px;
+  color:#F26A38;
+}
+.white-text {
+  color:#fff;
+  font-size:14px;
+}
+.work-closely.maroon-text {
+  max-width:755px;
+  margin-top:-5px;
+  margin-bottom:5px;
+}
+.maroon-text.margin0 {
+  margin: 0;
+}
+.event-include {
+	text-align:center;
+	font-weight:bold;
+}
+.register-text {
+  font-size:19px;
+  color:#F26A38;
+  font-family: /*'MinionPro',*/sans-serif;
+  text-align:center;
+  line-height: 20px;
+  font-weight:bold;
+  text-transform:uppercase;
+}
+#pdf-dvt-page-1 .meeting-id {
+  color:#F26A38;
+  font-size:12px;
+  font-family: /*'FlamaBas',*/sans-serif;
+  margin: 3px 0 75px;
+  text-align: center;
+}
+#pdf-dvt-page-2 {
+width:820px;
+background-size:contain;
+page-break-inside: avoid !important;
+page-break-before: avoid !important;
+}
+.title-wrapper .banner-title2 {
+  font-size:26px;
+  line-height:28px;
+  color:#76004B;
+  padding:55px 0 0 240px;
+  font-family: /*'FlamaBas',*/sans-serif;
+}
+.title-wrapper .banner-title2 span {
+  font-size:26px;
+  line-height:28px;
+  color:#F26A38;
+}
+
+#pdf-dvt-page-2 .title-wrapper .author {
+  color: #76004b;
+  font-family: /*"FlamaBas",*/sans-serif;
+  font-size: 12px;
+  line-height: 19px;
+  padding: 0 0 0 247px;
+}
+.meeting-agenda {
+  color: #f26a38;
+  font-family: /*'MinionPro',*/sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 18px;
+  margin: 9px 0 0 35px;
+}
+.session-tbl-wrapper {
+  margin: 5px 0 0 24px;
+}
+.session-tbl-wrapper th {
+  font-size:14px;
+  color:#F26A38;
+  font-family: /*'FlamaBas',*/sans-serif;
+  text-align:left;
+}
+.session-tbl-wrapper td {
+  font-size:12px;
+  color:#000;
+  font-family: /*'FlamaBas',*/sans-serif;
+
+}
+.session-tbl-wrapper th {
+  height: 33px;
+  padding:0 0 0 20px;
+}
+.session-tbl-wrapper td {
+  padding:0 0 0 20px;
+  
+}
+.session-tbl-wrapper .tbl-label-1 {
+  height: 34px;
+  width: 60px;
+  vertical-align:middle;
+}
+.session-tbl-wrapper .tbl-label-2 {
+  height: 52px;
+  width: 60px;
+  vertical-align:middle;
+  
+}
+.session-tbl-wrapper .tbl-label-3 {
+  height: 62px;
+  width: 60px;
+  vertical-align:middle;
+  
+}
+.session-tbl-wrapper .tbl-label-4 {
+  height: 36px;
+  width: 60px;
+  vertical-align:middle;
+}
+.session-tbl-wrapper .tbl-label-5 {
+  height: 50px;
+  width: 50px;
+  vertical-align:middle;
+}
+.td-orange-title {
+  color:#F26A38;
+  font-family: /*'MinionPro',*/sans-serif;
+  font-size: 12px;
+  font-weight: bold;
+  
+}
+.td-blck-title {
+  color:#000;
+  font-size:10px;
+  font-family: /*'FlamaBas',*/sans-serif;
+}
+.mobile-ECG-wrapper {
+  margin: 15px 0 24px 310px;
+}
+.mobile-ECG-orange-text {
+  color:#F26A38;
+  font-size:18px;
+  font-weight: bold;
+  font-family: /*'FlamaBas',*/sans-serif;
+  margin: 0 0 7px 0;
+}
+.register-wrp {
+  margin: 0 auto;
+  text-align: center;
+  width: 500px;
+}
+.register-wrp .maroon-text{
+  font-size:18px;
+}
+.mobile-ECG-text {
+  color:#000;
+  font-size: 12px;
+  line-height: 13px;
+  font-family: /*'FlamaBas',*/sans-serif;
+  width:400px;
+}
+#pdf-dvt-page-2 .btm-text {
+  color: #58595B;
+  font-family: /*"FlamaBas",*/sans-serif;
+  font-size: 9px;
+  line-height: 9px;
+  margin: 50px auto 20px;
+  text-align: center;
+  width: 650px;
+}
+.page2-bg-btm {
+width:820px;
+display:block;
+margin-top:0px;
+float:left;
+}
+.meeting-id-title {
+  font-size:14px;
+  color:#F26A38;
+}
+.meeting-id-num {
+  font-size:14px;
+  color:#fff;
+}
+.maroon-bg {
+  background:#76004b;
+  width:700px;
+  margin:0 auto 10px auto;
+  padding:15px;
+  height:60px;
+  text-align:center;
+  float:left;
+}
+.mob-text {
+text-align:center;
+line-height:30px;
+}
+.key-info-maroon-title {
+  color:#76004b;
+  font-size:18px;
+  font-family: /*'FlamaBas',*/sans-serif;
+  text-align:center;
+  line-height: 18px;
+  margin: 10px auto 0px auto;
+  font-weight:bold;
+}
+.pdf-dvt-page-2 .register-text {
+  font-size:20px;
+  color:#F26A38;
+  font-family: /*'MinionPro',*/sans-serif;
+  text-align:center;
+  line-height: 20px;
+  font-weight:bold;
+  text-transform:uppercase;
+}
+.pdf-dvt-page-2 .white-text {
+  color:#fff;
+  font-size:16px;
+}
+
+.pdf-dvt-page-2 .maroon-bg {
+  height:50px;
+}
+.whiteBg {
+  background:#fff;
+}
+.pdf-dvt-page-2 .whiteBg {
+  background:none;
+}

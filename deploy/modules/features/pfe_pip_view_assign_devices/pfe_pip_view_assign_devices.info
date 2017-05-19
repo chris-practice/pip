@@ -1,0 +1,10 @@
+name = pfe_pip_view_assign_devices
+description = A view to list the devices assigned to GP
+core = 7.x
+package = Features
+dependencies[] = views
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:2
+features[views_view][] = view_assign_devices
+features_exclude[dependencies][ctools] = ctools
+project path = sites/default/modules/features

@@ -1,0 +1,311 @@
+body,
+div,
+dl,
+dt,
+dd,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+pre,
+code,
+blockquote {
+  margin: 0;
+  padding: 0;
+  border-width: 0;
+}
+
+td,
+th {
+  border: 0;
+}
+
+body {
+  -epub-hyphens: auto;
+  font-family: /*'FlamaBas',*/
+  sans-serif;
+}
+
+
+/*****************page 1 **********************/
+
+#page-1 {
+  width: 680px;
+  page-break-inside: avoid !important;
+  page-break-after: always !important;
+  min-height: 600px;
+  margin:0 auto;
+}
+
+.offer-letter-logos {
+  width: 600px;
+  margin: 0 auto;
+}
+
+.offer-letter-logos img {
+  width: 600px;
+  height: 75px;
+}
+
+.sky-blue {
+  color: #365f91;
+  font-weight: bold;
+}
+
+.subject {
+  font-size: 26px;
+  text-align: center;
+  width: 100%;
+  font-weight: bold;
+  margin: 0 0 20px 0;
+}
+
+.attention {
+  font-size: 13px;
+  width: 100%;
+  margin: 10px 0;
+}
+
+.application-details {
+  font-size: 14px;
+  text-transform: uppercase;
+  width: 100%;
+  font-weight: bold;
+  margin: 0;
+}
+
+.sky-blue p {
+  margin: 0 0 15px 0;
+  font-size: 13px;
+}
+
+.yellow {
+  background: #ffffe7;
+  border: solid 1px #000;
+}
+
+.sign-wrapper {
+  margin: 20px 0 0 0;
+}
+
+.sign-wrapper .sign {
+  display: inline-block;
+  width: 70%;
+  color: red;
+  font-size: 14px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.sign-wrapper .dt {
+  display: inline-block;
+  width: 30%;
+  color: red;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.sponsership {
+  color: red;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.doc-name {
+  margin-top: 10px;
+}
+
+.address-wrapper {
+  margin-bottom: 0;
+}
+
+.address-wrapper .left-wrapper {
+  width: 58%;
+  display: inline-block;
+  font-size: 13px;
+}
+
+.address-wrapper .rght-wrapper {
+  width: 40%;
+  display: inline-block;
+  font-size: 13px;
+}
+
+.need {
+  font-size: 13px;
+}
+
+.black-box {
+  width: 98%;
+  border: solid 1px #00;
+  height: 50px;
+  margin: 0 0 10px 0;
+  font-size: 13px;
+  color:#333;
+}
+
+.smll-txt {
+  font-size: 8px;
+}
+
+.date {
+  font-size: 8px;
+  text-align: right;
+  width: 100%;
+  margin: 0;
+}
+
+.gp-name-address,
+.doc-name {
+  font-size: 13px;
+}
+
+table {
+  width: 100%;
+  border-spacing: 0 10px;
+}
+
+td {
+  font-size: 13px;
+  padding: 5px;
+  vertical-align: top;
+}
+
+.addr,
+.phone {
+  height: 40px;
+}
+
+.lbl {
+  width: 150px;
+}
+
+.tbl-2 .lbl {
+  width: 140px;
+}
+.tbl-2 .lbl.ln-prd {
+  width: 80px;
+}
+.tbl-2 .lbl.ln-week {
+  width: 200px;
+}
+
+.email-add {
+  float: right;
+  padding: 5px;
+  width: 70%;
+  float: right;
+  margin-left: 28%;
+}
+
+
+/*****************page 2 **********************/
+
+#page-2 {
+  width: 680px;
+  background-size: contain;
+  page-break-inside: avoid !important;
+  margin:0 auto;
+}
+
+.certification,
+.manager-approval {
+  margin-top: 40px;
+  font-size: 14px;
+}
+
+.agree,
+.sign,
+.print-name,
+.title,
+.cert-dt {
+  margin-bottom: 15px;
+  font-size: 13px;
+}
+
+.sign,
+.print-name,
+.title,
+.cert-dt {
+  width: 320px;
+  display: inline-block;
+  margin: 0;
+  overflow: hidden;
+  color:#333;
+  padding-bottom:10px;
+}
+
+.sign,
+.print-name {
+  margin: 0 2% 0 0;
+}
+
+.clear {
+  clear: both;
+}
+
+.colleague-name {
+  margin-bottom: 5px;
+  font-size: 13px;
+}
+
+.checkbox {
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  border: solid 1px #000;
+  margin: 0 10px 10px 0;
+  position: relative;
+  top: 10px;
+}
+
+.agree {
+  margin: 20px 0 0 0;
+}
+
+.agree-content {
+  display: inline-block;
+  color:#333;
+}
+
+.approve {
+  margin: 10px 0 0 0;
+  font-size: 13px;
+}
+
+.not-approve {
+  margin: 0;
+  font-size: 13px;
+}
+
+.blk-bg {
+  background: #000;
+  color: #fff;
+  display: block;
+  padding: 5px 0;
+  text-transform: uppercase;
+  text-indent: 5px;
+}
+
+.dotted-brdr {
+  border-bottom: dotted 1px #000;
+  width: 100%;
+  display: inline-block;
+  color:#333;
+}
+.dots {
+  border-bottom:dotted 1px #000;
+  padding-top:10px;
+  height:20px;
+  display:inline-block;
+}
+.attention-dots {
+  border-bottom:dotted 1px #000;
+  padding-top:10px;
+  height:18px;
+  width:460px;
+  display:inline-block;
+}

@@ -1,0 +1,125 @@
+<?php
+/**
+ * Implements hook_theme().
+ */
+function mailing_theme() {
+  return array(
+    'create_meeting_mail' => array(
+      'variables' => array('items' => NULL),
+      'template' => 'templates/create-meeting',
+    ),
+  );
+}
+
+function mailing_node_insert($node){
+
+if($node->type == 'meetings'){
+  global $user;
+  global $base_url;
+  $uid = $user->uid;
+  $query = db_select('users','usr')->fields('usr',array('uid'));
+           $query->innerJoin('field_data_field_user_company','comp','usr.uid = comp.entity_id');
+           $query->condition('comp.entity_type','user','=');
+           $query->condition('comp.deleted','0','=');
+           $query->condition('usr.status','0','<>');
+  $db_and = db_and();         
+            $db_and->condition('comp.field_user_company_tid','61','=');
+            $db_and->condition('usr.uid',$uid,'=');
+           
+          $query->condition($db_and); 
+          $result = $query ->execute()->fetchAll(PDO::FETCH_ASSOC);   
+   
+  if(count($result)>0)
+    $from_mail = 'Kimberley.Henderson@pfizer.com';
+  else
+  $from_mail = 'bmsarsvp@jackmorton.com.au';
+  
+  $params = array();
+  $params['subject'] = t('Thrombo 360 – Meeting Created');
+  
+  $items = array();
+  
+  $items['meeting_date'] = !empty($node->field_meeting_date[LANGUAGE_NONE][0]['value']) ? date('d F Y', $node->field_meeting_date[LANGUAGE_NONE][0]['value']) : '';
+  $items['meeting_time'] = !empty($node->field_meeting_time[LANGUAGE_NONE][0]['value']) ? $node->field_meeting_time[LANGUAGE_NONE][0]['value'] : '';
+  $items['meeting_venue'] = !empty($node->field_venue_name[LANGUAGE_NONE][0]['value']) ? $node->field_venue_name[LANGUAGE_NONE][0]['value'] : '';
+  $items['meeting_address'] = '';
+  if($node->field_venue_address[LANGUAGE_NONE][0]['value']) {
+    $items['meeting_address'] = $node->field_venue_address[LANGUAGE_NONE][0]['value'];
+  }
+  if($node->field_venue_city[LANGUAGE_NONE][0]['value']) {
+    $items['meeting_address'] .= ', ' . $node->field_venue_city[LANGUAGE_NONE][0]['value'];
+  }
+  if($node->field_venue_postcode[LANGUAGE_NONE][0]['value']) {
+    $items['meeting_address'] .= ', ' . $node->field_venue_postcode[LANGUAGE_NONE][0]['value'];
+  }
+  $items['meeting_activity'] = $node->field_meeting_activity[LANGUAGE_NONE][0]['value'];
+  
+  $items['speaker_details'] = array();
+  
+  if(!empty($node->field_speaker_details[LANGUAGE_NONE])) {
+    foreach($node->field_speaker_details[LANGUAGE_NONE] as $speakers) {
+      $speaker_ids[] = $speakers['value'];
+    }
+    $speaker_details = field_collection_item_load_multiple($speaker_ids);
+    foreach($speaker_details as $key => $value) {
+      $speaker = new stdClass();
+      $speaker->name_title  = $value->field_speaker_title_name[LANGUAGE_NONE][0]['value'];
+      $speaker->full_name  = $value->field_speaker_full_name[LANGUAGE_NONE][0]['value'];
+      $speaker->title  = $value->field_speaker_title[LANGUAGE_NONE][0]['value'];
+      $speaker->organization  = $value->field_speaker_organisation[LANGUAGE_NONE][0]['value'];
+      $items['speaker_details'][] = $speaker;
+    }
+  }
+  
+  $lead_rep = user_load($node->field_meeting_lead_rep[LANGUAGE_NONE][0]['uid']);
+  $support_rep = user_load($node->field_supporting_rep[LANGUAGE_NONE][0]['uid']);
+   
+  if(!empty($node->field_meeting_additional_rep[LANGUAGE_NONE])) {
+    foreach($node->field_meeting_additional_rep[LANGUAGE_NONE] as $a => $add_reps) {
+      $add_rep_ids[] = $add_reps['uid'];
+    }
+    $add_reps = user_load_multiple($add_rep_ids);
+  }
+  
+  $items['rep_name'] = $user->name;
+  $items['rep_surname'] = isset($user->surname) ? $user->surname : '';
+  $items['role'] = 'admin_or_ho';
+  $params['body'] = theme('create_meeting_mail', array('items' => $items));
+  drupal_mail('mailing', 'information', $user->mail, language_default(), $params, $from, $send = TRUE);
+  
+  if($lead_rep) {
+    $items['role'] = 'lead_or_add';
+    $items['rep_name'] = $lead_rep->name;
+    $items['rep_surname'] = isset($lead_rep->surname) ? $lead_rep->surname : '';
+    $params['body'] = theme('create_meeting_mail', array('items' => $items));
+    drupal_mail('mailing', 'information', $lead_rep->mail, language_default(), $params, $from, $send = TRUE);
+  }
+  if($support_rep) {
+    $items['role'] = 'support_rep';
+    $items['rep_name'] = $support_rep->name;
+    $items['rep_surname'] = isset($support_rep->surname) ? $support_rep->surname : '';
+    $params['body'] = theme('create_meeting_mail', array('items' => $items));
+    drupal_mail('mailing', 'information', $support_rep->mail, language_default(), $params, $from, $send = TRUE);
+  }
+  
+  if(isset($add_reps) && !empty($add_reps)) {
+    $items['role'] = 'lead_or_add';
+    foreach($add_reps as $u => $repss) {
+      $items['rep_name'] = $repss->name;
+      $items['rep_surname'] = isset($repss->surname) ? $repss->surname : '';
+      $params['body'] = theme('create_meeting_mail', array('items' => $items));
+      drupal_mail('mailing', 'information', $repss->mail, language_default(), $params, $from, $send = TRUE);
+    }
+  }
+}
+}
+ 
+function mailing_mail($key, &$message, $params = array()) {
+  switch ($key) {
+    case 'information':
+      $message['subject'] = $params['subject'];
+      $message['body'][] = $params['body'];
+    break;
+    }
+}
+

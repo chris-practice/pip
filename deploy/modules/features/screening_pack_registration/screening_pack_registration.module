@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Screening Pack Registration feature.
+ */
+
+include_once 'screening_pack_registration.features.inc';

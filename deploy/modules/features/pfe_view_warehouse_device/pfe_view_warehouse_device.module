@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the pfe_view_warehouse_device feature.
+ */
+
+include_once 'pfe_view_warehouse_device.features.inc';

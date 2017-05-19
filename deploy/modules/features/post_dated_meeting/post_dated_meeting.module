@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Post dated meeting feature.
+ */
+
+include_once 'post_dated_meeting.features.inc';

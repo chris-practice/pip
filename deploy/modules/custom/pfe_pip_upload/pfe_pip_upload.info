@@ -1,0 +1,4 @@
+name = PIP upload schema.
+description = Adds custom table fpr upload.
+core = 7.x
+package = Pfizer

@@ -1,0 +1,306 @@
+<?php
+function cron_mail_cron() {
+global $user;  
+
+$from = 'pqr.com';
+watchdog('cron_mail', 'Hello Cron!');
+
+$today = format_date(REQUEST_TIME, 'custom', 'Y-m-d'); 
+
+$query = db_select('assigned_device','assign')
+        ->fields('assign',array('represponsible_name', 'gpname', 'enddate', 'deviceid', 'lead_rep_id', 'supporting_rep_id', 'gpid', 'represponsible_id', 'unique_val', 'mail_flag_seven_days', 'mail_flag_fourteen_days','node_type'))
+        ->condition('returnstatus', array(0));        
+         $result = $query ->execute()->fetchAll(PDO::FETCH_ASSOC);
+
+
+  foreach($result as $key=>$val){
+  $lead_rep_name = user_load($val['lead_rep_id'])->field_user_name[LANGUAGE_NONE][0]['value'];
+  $lead_rep_surname = user_load($val['lead_rep_id'])->field_user_surname[LANGUAGE_NONE][0]['value'];
+  $lead_rep_phone = user_load($val['lead_rep_id'])->field_phone[LANGUAGE_NONE][0]['value'];
+  $supporting_rep_name = user_load($val['supporting_rep_id'])->field_user_name[LANGUAGE_NONE][0]['value'];
+  $supporting_rep_surname = user_load($val['supporting_rep_id'])->field_user_surname[LANGUAGE_NONE][0]['value'];
+  $supporting_rep_phone = user_load($val['supporting_rep_id'])->field_phone[LANGUAGE_NONE][0]['value'];  
+  $registrant_info = registration_load_multiple(array($val['gpid']));
+  $gp_mail = $registrant_info[$val['gpid']]->field_registrant_email[LANGUAGE_NONE][0]['value'];
+
+  $represponsible_email = user_load($val['represponsible_id'])->mail;
+
+  $formatted_enddate = $val['enddate'];
+  $difference_reminder_date = (abs(strtotime($formatted_enddate)) - abs(strtotime($today)))/86400;
+  $difference_overdue_date = (abs(strtotime($today)) - abs(strtotime($formatted_enddate)))/86400;
+    if($difference_reminder_date == 7 && $val['mail_flag_seven_days'] == 0){
+      $to_gp = $gp_mail;   
+      $from_gp = "Thrombo 360 Education <no-reply@thrombo360education.com.au>"; // from e-mail address
+      $email_description='<div>
+The Pfizer–Bristol-Myers Squibb Alliance respects your privacy, and fully complies with the Privacy Act 1988 (Cth) and the Australian Privacy Principles. For further details on how the Pfizer-BMS Alliance (and Pfizer and BMS respectively) collect, store, use and disclose your personal information please see each company’s Privacy Policy at <a href="http://www.bmsa.com.au/">www.bmsa.com.au</a> or <a href="http://www.pfizer.com.au/">www.pfizer.com.au</a>. If you wish to enquire about any personal information that Pfizer or BMS hold about you, to cease receiving information from us, request a copy of either company’s Privacy Policy, or complain about the processing of your personal information that Pfizer or BMS holds about you, then please write to the Privacy Officer at either company (Pfizer Australia Pty Ltd, 38-42 Wharf Road, West Ryde, NSW, 2114 or email <a href="mailto:privacyofficer.australia@pfizer.com">privacyofficer.australia@pfizer.com</a>, or Bristol-Myers Squibb Australia Pty Ltd, 4 Nexus Court, Mulgrave, VIC, 3170 or phone 1800 067 567 or +61 3 8523 4200 or email <a href="mailto:contact.australia@bms.com">contact.australia@bms.com</a>).
+</div>';
+      if($val['node_type']=='screening_pack'){
+        $subject_gp = "AF Screening Program – AliveCor Loan Reminder";
+         $body_gp = '<div><strong>' . t("Dear ") .  $val['gpname'] . ',</strong></div><br><div>' . t('Thank you for participating in the AF Screening Program. ').
+              t("Thank you for participating in the AF Screening Program. This is a friendly reminder that your AliveCor loan will be finishing on   ") . date('d F Y',strtotime($val['enddate'])) . '.</div><div>' . t("Your ELIQUIS representatives,  ") 
+              .$represponsible_email->field_user_name[LANGUAGE_NONE][0]['value'] .'&nbsp;'. $represponsible_email->ield_user_surname[LANGUAGE_NONE][0]['value'] .'&nbsp;'. $represponsible_email->field_phone[LANGUAGE_NONE][0]['value'] .'&nbsp;'.'&nbsp;'. t('will be contact shortly to collect the device.') . '</div><div></div>' . '<div>Kind regards,</div><div>Thrombo 360</div>' .'</div><div><img src="https://www.thrombo360education.com.au/sites/default/themes/custom/paininpractice/images/logo.png"/><img src ="https://www.thrombo360education.com.au/sites/default/themes/custom/paininpractice/images/bristol-myers-logo.jpg"/></div>'.$email_description; 
+      }elseif($val['node_type']=='meetings' || $val['node_type']=='alivecor'){
+        $subject_gp = "Thrombo 360 – AliveCor Loan Reminder";
+         $body_gp = '<div><strong>' . t("Dear ") .  $val['gpname'] . ',</strong></div><br><div>' .t("This is a friendly reminder that your AliveCor loan will be finishing on  ") . date('d F Y',strtotime($val['enddate'])) . '.</div><div>' . t("Your ELIQUIS representatives,  ") 
+              .$lead_rep_name .'&nbsp;'. $lead_rep_surname .'&nbsp;'. $lead_rep_phone .'&nbsp;'. t("and") . $supporting_rep_name .'&nbsp;'. $supporting_rep_surname .'&nbsp;'. $supporting_rep_phone .'&nbsp;'. t('will be contact shortly to collect the device.') . '</div><div></div>' . '<div>Kind regards,</div><div>Thrombo 360</div>' .'</div><div><img src="https://www.thrombo360education.com.au/sites/default/themes/custom/paininpractice/images/logo.png"/><img src ="https://www.thrombo360education.com.au/sites/default/themes/custom/paininpractice/images/bristol-myers-logo.jpg"/></div>'.$email_description; 
+      } 
+      $subject_gp = "Thrombo 360 – AliveCor Loan Reminder";
+      $body_gp = '<div><strong>' . t("Dear ") .  $val['gpname'] . ',</strong></div><br><div>' .t("This is a friendly reminder that your AliveCor loan will be finishing on  ") . date('d F Y',strtotime($val['enddate'])) . '.</div><div>' . t("Your ELIQUIS representatives,  ") 
+              .$lead_rep_name .'&nbsp;'. $lead_rep_surname .'&nbsp;'. $lead_rep_phone .'&nbsp;'. t("and") . $supporting_rep_name .'&nbsp;'. $supporting_rep_surname .'&nbsp;'. $supporting_rep_phone .'&nbsp;'. t('will be contact shortly to collect the device.') . '</div><div></div>' . '<div>Kind regards,</div><div>Thrombo 360</div>' .'</div><div><img src="https://www.thrombo360education.com.au/sites/default/themes/custom/paininpractice/images/logo.png"/><img src ="https://www.thrombo360education.com.au/sites/default/themes/custom/paininpractice/images/bristol-myers-logo.jpg"/></div>'; 
+      $params_gp = array(
+      'subject' => $subject_gp,
+      'body' => $body_gp,
+      );
+           
+      drupal_mail('cron_mail', 'seven_days_mail_rep', $to_gp, language_default(), $params_gp, $from_gp, $send = TRUE);
+  
+    
+    if($val['node_type']=='screening_pack'){
+        $sp_rep_mail=t(' and return to RR Donnelly');
+        $subject_rep_val="AF Screening Program – AliveCor Loan Reminder";
+      }elseif($val['node_type']=='meetings' || $val['node_type']=='alivecor'){
+        $sp_rep_mail='';
+        $subject_rep_val="Thrombo 360 – AliveCor Loan Reminder";
+      }
+    $to_rep = $represponsible_email;   
+      $from_rep = "Thrombo 360 Education <no-reply@thrombo360education.com.au>"; // from e-mail address
+      $subject_rep = $subject_rep_val; 
+      $body_rep = '<div><strong>' . t("Dear ") .  $val['represponsible_name'] . ',</strong></div><br><div>' .
+t("This is a friendly reminder that your AliveCor loan for ") . $val['gpname'] .t("will be finishing on ").date('d F Y',strtotime($val['enddate'])) .'.</div><div>' . t('Please organise to collect the AliveCor from your HCP and return device') . $val['deviceid'].t('to the warehouse.').'</div><div></div><div>Kind regards,</div><div>Thrombo 360</div>' .'</div><div><img src="https://www.thrombo360education.com.au/sites/default/themes/custom/paininpractice/images/logo.png"/><img src ="https://www.thrombo360education.com.au/sites/default/themes/custom/paininpractice/images/bristol-myers-logo.jpg"/></div>'; 
+      $params_rep = array(
+      'subject' => $subject_rep,
+      'body' => $body_rep,
+      );
+      watchdog('cron_mail_rep', $to_rep);
+      watchdog('device_id',$val['deviceid']);
+     
+    drupal_mail('cron_mail', 'seven_days_mail_gp', $to_rep, language_default(), $params_rep, $from_rep, $send = TRUE);  
+     $flag_update_seven_days = db_update('assigned_device')
+    ->fields(array('mail_flag_seven_days' => '1'))
+    ->condition('deviceid',$val['deviceid'])
+    ->condition('unique_val',$val['unique_val'])
+    ->execute();
+    }
+ 
+  if($difference_overdue_date == 14 && $val['mail_flag_fourteen_days'] == 0){
+    if($val['node_type']=='screening_pack'){
+        $overdue_subject="Screening Program – AliveCor Device Overdue";
+        $sp_wr_mail=t('Please organise a pick up for device   '). $val['deviceid'] . t(' and return to RR Donnelly.');
+      }elseif($val['node_type']=='meetings' || $val['node_type']=='alivecor'){
+        $overdue_subject="Thrombo 360 – AliveCor Device Overdue";
+        $sp_wr_mail=t('Please organise to collect the AliveCor from your HCP and return device  ') . $val['deviceid'] . t(' to the warehouse.');
+      }
+      $to_rep = $represponsible_email;   
+      $from_rep = "Thrombo 360 Education <no-reply@thrombo360education.com.au>"; // from e-mail address.
+      $subject_rep = $overdue_subject; 
+      $body_rep = '<div><strong>' . t("Dear ") .  $val['represponsible_name'] . ',</strong></div><br><div>' . 
+              t("This is a friendly reminder that your AliveCor loan for ") . $val['gpname'] . '</div><div>' . t("finished on ") 
+              .date('d F Y',strtotime($val['enddate'])) .t(" and is now overdue.") .'</div><div>' .$sp_wr_mail.
+              '</div><div></div><div>Kind regards,</div><div>Thrombo 360</div>' .'</div><div><img src="https://www.thrombo360education.com.au/sites/default/themes/custom/paininpractice/images/logo.png"/><img src ="https://www.thrombo360education.com.au/sites/default/themes/custom/paininpractice/images/bristol-myers-logo.jpg"/></div>'; 
+      $params_rep = array(
+      'subject' => $subject_rep,
+      'body' => $body_rep,
+      );
+      watchdog('cron_mail_rep_overdue', $to_rep);
+      watchdog('device_id',$val['deviceid']);
+    drupal_mail('cron_mail', 'fourteen_days_mail_rep', $to_rep, language_default(), $params_rep, $from_rep, $send = TRUE);
+    watchdog('cron_mail_rep','test');
+   
+    $flag_update_fourteen_days = db_update('assigned_device')
+    ->fields(array('mail_flag_fourteen_days' => '1'))
+    ->condition('deviceid',$val['deviceid'])
+    ->condition('unique_val',$val['unique_val'])
+    ->execute();
+  }
+ 
+}
+/*Automatic Meeting Reminder to GP */
+$now = date('Y-m-d');
+$tomorrow = date('Y-m-d', strtotime($now .' + 1 days'));
+$tom_date=strtotime($tomorrow);
+watchdog('tom_date', $tom_date);
+$query = db_select('field_data_field_meeting_date','meeting')
+        ->fields('meeting',array('entity_id', 'field_meeting_date_value'))
+        ->condition('field_meeting_date_value', array($tom_date));
+$result = $query ->execute()->fetchAll(PDO::FETCH_ASSOC);
+$flag = flag_get_flag('cancel_meeting');         
+    foreach($result as $res){
+      $data['nid']=$res['entity_id'];
+      $flag_val=$flag->is_flagged($data['nid']);
+      if($flag_val!=1){      
+        pfe_pip_meetings_send_reminder($data);
+      }
+    }
+
+  $current_date = date(l);
+      if($current_date == 'Wednesday'){
+        cron_mail_weekly_devicestatus_xls();
+      }
+       $month_end_date=date('t-m-Y');
+   $today_date= date('d-m-Y');
+    if($month_end_date == $today_date){ 
+        cron_mail_monthly_devicestatus_xls();
+    }
+
+}
+
+function cron_mail_mail($key, &$message, $params = array()) {
+  switch ($key) {
+    case 'seven_days_mail_rep':
+      $message['subject'] = $params['subject'];
+      $message['body'][] = $params['body'];
+    break;
+
+    case 'fourteen_days_mail_rep':
+      $message['subject'] = $params['subject'];
+      $message['body'][] = $params['body'];
+    break;
+
+    case 'seven_days_mail_gp':
+      $message['subject'] = $params['subject'];
+      $message['body'][] = $params['body'];
+    break;
+   
+   case 'weekly_device_report_mail':
+      $message['subject'] = $params['subject'];
+      $message['body'][] = $params['body'];
+      $message['params']['attachments'][] = $params['attachments'];
+      $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed';
+    break;  
+
+   }
+    if(isset($_ENV['AH_SITE_ENVIRONMENT']) && $_ENV['AH_SITE_ENVIRONMENT'] && strtolower($_ENV['AH_SITE_ENVIRONMENT']) != 'prod') {
+      $message['subject'] = $_ENV['AH_SITE_ENVIRONMENT'].' - '.$params['subject'];
+   }
+}
+
+
+function cron_mail_weekly_devicestatus_xls() {
+$from = 'Thrombo 360 Education <no-reply@thrombo360education.com.au>';
+require_once (getcwd().'/'.libraries_get_path('PHPExcel') .'/Classes/PHPExcel.php');          
+$objPHPExcel = new PHPExcel();
+$now = date('Y-m-d');
+$start_date = date('Y-m-d', strtotime($now .' - 7 days'));
+
+$query = db_select('assigned_device','assign')
+        ->fields('assign',array('deviceid', 'gpname', 'address', 'represponsible_name', 'startdate', 'enddate'))
+        ->condition('returnstatus', array(0))
+        ->condition('startdate',array($start_date, $now), 'BETWEEN');
+$weekly_device = $query ->execute()->fetchAll(PDO::FETCH_ASSOC);
+
+
+$rows;
+foreach($weekly_device as $key=>$val){                          
+  $rows[$key] = array($val['deviceid'],
+                  $val['gpname'],
+                  $val['address'],
+                  $val['represponsible_name'],
+                  $val['startdate'],
+                  $val['enddate'],
+                  );
+}
+// Set document properties
+$objPHPExcel->getProperties()->setCreator("Admin")
+               ->setLastModifiedBy("Admin")
+               ->setTitle("Office 2007 XLSX gmp_testbit(a, index) Document")
+               ->setSubject("Office 2007 XLSX Test Document")
+               ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+               ->setKeywords("office 2007 openxml php")
+               ->setCategory("Weekly report");
+  
+      $header = array('Device ID', 'GP Name', 'GP Address', 'Rep Name', 'Loan Start', 'Loan End');
+$objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', 'Weekly device delivered report');
+
+ for ($i=0; $i<=sizeof($header); $i++) {   
+  $j =65+$i;
+    // store the character
+  $letter = chr($j);
+  $objPHPExcel->setActiveSheetIndex(0)->setCellValue($letter.'2', $header[$i]);
+ }
+// Add some data
+$ews = $objPHPExcel->getSheet(0);
+      $ews->fromArray($rows, ' ', 'A3');    
+ //Rename worksheet
+$objPHPExcel->getActiveSheet()->setTitle('Weekly device delivered report');
+
+
+// Set active sheet index to the first sheet, so Excel opens this as the first sheet
+$objPHPExcel->setActiveSheetIndex(0);
+$objPHPExcel->getActiveSheet()->getStyle('A2:Z2')->getFont()->setBold(true);
+ $objPHPExcel->getActiveSheet()->getStyle('A2:Z2')->getFill()->applyFromArray(array(
+        'type' => PHPExcel_Style_Fill::FILL_SOLID,
+        'startcolor' => array(
+             'rgb' => 'D60093'
+        )
+    ));
+  
+$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+ob_end_clean();
+
+$directory = 'sites/default/files/weekly_device_status';
+$file_name = 'weekly_report.xlsx';
+  
+    if (!file_prepare_directory($directory, $options = FILE_MODIFY_PERMISSIONS)) {
+      drupal_mkdir($directory);
+      }
+$output =  new stdClass();
+$output = $objWriter->save($directory . '/' . $file_name);
+$path = $directory . '/' . $file_name;
+
+    $params['subject'] = t('AliveCor report');
+    $params['body'] = '<div>'. t("The weekly AliveCor report with full order details is attached. Letter   of Offer and other documentation sent previously should be printed and sent with the devices outlined on the report.") . '</div><div></div><div>' . t("Please contact Kimberley Henderson at kimberley.henderson@pfizer.com if you have any questions.") . '</div><div></div><div>' . t("Kind regards,") . '</div><div>' . t("Thrombo 360") . '</div><div><img src="https://www.thrombo360education.com.au/sites/default/themes/custom/paininpractice/images/logo.png"/><img src ="https://www.thrombo360education.com.au/sites/default/themes/custom/paininpractice/images/bristol-myers-logo.jpg"/></div>' ;
+    
+    $params['attachments'] = array(
+    'filecontent' => file_get_contents($path),
+    'filename' => $file_name,
+    'filepath' => 'sites/default/files/weekly_device_status'."/". $file_name,
+    'filemime' => 'application/vnd.ms-excel'
+    );
+
+    
+    $role = user_role_load_by_name('Warehouse');
+    $uids = db_select('users_roles', 'ur')
+        ->fields('ur', array('uid'))
+        ->condition('ur.rid', $role->rid, '=')
+        ->execute()
+       ->fetchCol();
+   $warehouse_info = user_load_multiple($uids);
+
+   $warehouse_email=array();
+   foreach($warehouse_info as $user_info){
+          drupal_mail('cron_mail', 'weekly_device_report_mail', $user_info->mail , language_default(), $params, $from, $send = TRUE);
+
+   } 
+
+}
+function cron_mail_monthly_devicestatus_xls() {
+  global $user;
+$original_user = $user;
+$old_state = drupal_save_session();
+drupal_save_session(FALSE);
+$user = user_load(1); 
+ $display =views_embed_view('view_gp_list', 'views_data_export_1'); 
+file_unmanaged_save_data($display , 'sites/default/files/monthly_device_status/monthly_report.xls', FILE_EXISTS_REPLACE);
+$user = $original_user;
+drupal_save_session($old_state);   
+ $from = 'Thrombo 360 Education <no-reply@thrombo360education.com.au>';
+ $directory = 'sites/default/files/monthly_device_status';
+ $file_name = 'monthly_report.xls';  
+ if (!file_prepare_directory($directory, $options = FILE_MODIFY_PERMISSIONS)) {
+      drupal_mkdir($directory);
+      } 
+
+  $params['subject'] = t('Monthly Email Consent Report');
+    $params['body'] = '<div></div>' ;
+    
+    $params['attachments'] = array(
+    'filecontent' => file_get_contents($path),
+    'filename' => $file_name,
+    'filepath' => 'sites/default/files/monthly_device_status'."/". $file_name,
+    'filemime' => 'application/vnd.ms-excel'
+    );
+ $params['headers'] = array(    
+    'Cc' => 'Rosalyn.wilson@pfizer.com',
+);
+  drupal_mail('cron_mail', 'weekly_device_report_mail',"ruth.dyson@pfizer.com" , language_default(), $params, $from, $send = TRUE);
+ }

@@ -1,0 +1,3 @@
+name = mailing
+description = Test mailing system
+core = 7.x

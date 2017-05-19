@@ -1,0 +1,10 @@
+name = Admin view assign devices
+description = A feature to view devices for Admin
+core = 7.x
+package = Features
+dependencies[] = views
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:2
+features[views_view][] = admin_device_status_view
+features_exclude[dependencies][ctools] = ctools
+project path = //192.168.16.133/htdocs/projects/PIP_two/sites/default/modules/features/rep_devices_list

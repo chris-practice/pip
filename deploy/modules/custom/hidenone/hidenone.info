@@ -1,0 +1,3 @@
+name = Hide None
+description = Hide the none value from select list.
+core = 7.x

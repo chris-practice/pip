@@ -1,0 +1,576 @@
+<?php
+/**
+ * @file
+ * Provides primary Drupal hook implementations.
+ * This module includes logic for customization needed for screening packs.
+ */
+/**
+ * Implements hook_permission().
+ */
+function pfe_screening_pack_permission() {
+  return array(
+    'access free devices report' => array(
+      'title' => t('Access Free devices'),
+    )
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function pfe_screening_pack_menu(){
+  $items = array();
+  $items['screeningpack-report'] = array(
+    'title' => 'Screening Pack Report',
+    'page callback' => '_pfe_get_screening_list',
+    'access callback' => TRUE,
+  );
+  $items['screeningpack-export'] = array(
+    'title' => 'Screening Pack Report',
+    'page callback' => '_screening_list_export',
+    'access callback' => TRUE,
+  );
+  $items['alivecor-report'] = array(
+    'title' => 'Alivecor Report',
+    'page callback' => '_pfe_get_screening_list',
+    'access callback' => TRUE,
+  );
+  $items['alivecor-export'] = array(
+    'title' => 'Alivecor Report',
+    'page callback' => '_screening_list_export',
+    'access callback' => TRUE,
+  );  
+  $items['free-devices-report'] = array(
+    'title' => 'Free Devices Report',
+    'page callback' => '_pfe_get_free_devices',
+    'access arguments' => array('access free devices report'),
+     
+  );
+  $items['devicereport-export'] = array(
+    'title' => 'Screening Pack Report',
+    'page callback' => '_screening_list_export',
+    'access arguments' => array('access free devices report'),
+  );
+  $items['devices-document'] = array(
+    'title' => 'Devices Documents',
+    'page callback' => '_pfe_get_device_document',
+    'access arguments' => array('access free devices report'),
+  );
+  $items['speaker-content-report'] = array(
+    'title' => 'Speaker Content Report',
+    'page callback' => 'speaker_own_content_list',
+    'access arguments' => array('access free devices report'),     
+  );  
+  $items['speaker-content-export'] = array(
+    'title' => 'Speaker Content Report',
+    'page callback' => '_screening_list_export',
+    'access arguments' => array('access free devices report'),     
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function pfe_screening_pack_block_info() {
+  $blocks = array();
+  $blocks['pfe_screening_pack_form'] = array(
+    'info' => t('Screening Pack Form'),
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function pfe_screening_pack_block_view($delta = ''){
+  $block = array();
+  switch ($delta) {
+    case 'pfe_screening_pack_form':
+      $block['subject'] = t('');
+      $block['content'] = pfe_screening_pack_get_form();
+      break;
+    }
+  return $block;
+}
+
+/**
+ * Callback function for form render.
+ */
+function pfe_screening_pack_get_form(){
+  return drupal_get_form('pfe_screening_pack_form_data');
+}
+
+/**
+ * Callback function for form render.
+ */
+function pfe_screening_pack_form_data($form, &$form_state) {
+  $form['screening_reports'] = array(
+    '#type' => 'select',
+    '#title' => t('Report'),
+    '#description' => t(''),    
+    '#options' => array('--- SELECT ---'=> 'Select','/screeningpack-report'=>'Screening Pack report', '/alivecor-report'=>'AliveCor Report'),
+    '#attributes' => array('onchange'=>"window.location.href=this.value"),
+  );
+  return $form;
+}
+
+/**
+ * Callback function to get table listing for screeningpack & alivecor.
+ */
+ function _pfe_get_screening_list() {
+  $rows = array();
+  $header = array(
+    array('data' => 'Device ID'),
+    array('data' => 'GP Name'),
+    array('data' => 'GP Email'),
+    array('data' => 'Rep Responsible'),
+    array('data' => 'State'),
+    array('data' => 'Date of Assignment'),
+  );
+  
+  if(arg(0) == 'screeningpack-report'){
+     $db_result = _pfe_screeningpack_get_data('screening_pack');
+     $button = '<a class = "download-report" href="/screeningpack-export">Download</a>';
+  }
+  if(arg(0) == 'alivecor-report'){
+     $db_result = _pfe_screeningpack_get_data('alivecor');
+     $button = '<a class = "download-report" href="/alivecor-export">Download</a>';
+  }
+ 
+  if (count($db_result)) {
+    foreach($db_result as $result) {
+      $rows[$result->deviceid]['deviceid'] = $result->deviceid;
+      $rows[$result->deviceid]['gpname'] = $result->gpname;
+      $rows[$result->deviceid]['email'] = $result->gp_email_id;
+      $rows[$result->deviceid]['Represponsible'] = $result->represponsible_name;
+      $rows[$result->deviceid]['state'] = $result->field_registrant_state_value;
+      $rows[$result->deviceid]['assigned_date'] = date('m/d/Y', $result->created);
+    }
+  }
+  $build['screening_table'] = array(
+    '#theme' => 'table',
+    '#header' => $header,
+    '#rows' => $rows,
+    '#empty' => t('Not available.'),
+    '#suffix'=> $button,
+  );
+  $build['screening_pager'] = array('#theme' => 'pager');
+  return $build;
+}
+
+
+/**
+ * Callback function to get table listing for devices Documents.
+ */
+function _pfe_get_device_document(){
+  $rows = array();
+  $header = array(
+    array('data' => 'Device ID'),
+    array('data' => 'Loan Type'),
+    array('data' => 'GP Name'),
+    array('data' => 'Rep Responsible'),
+    array('data' => 'System Genrated LRF'),
+    array('data' => 'System Genrated LOO'),
+    array('data' => 'Completed LRF'),
+    array('data' => 'Completed LOO'),
+  );
+  $db_result = _pfe_device_document_get_data();
+  if (count($db_result)) {
+    foreach($db_result as $result) {
+      $rows[$result->deviceid]['deviceid'] = $result->deviceid;
+      $rows[$result->deviceid]['loan_type'] = $result->meetingid;
+      $rows[$result->deviceid]['gpname'] = $result->gpname;
+      $rows[$result->deviceid]['rep_represponsible'] = $result->represponsible_name;
+      $rows[$result->deviceid]['sg_lrf'] = l('LRF PDF', file_create_url('public://system_pdf/' . $result->sg_lrf_id), array('attributes' => array('class' => 'loo_pdf', 'target' => '_blank')));
+      $rows[$result->deviceid]['sg_loo'] = l('LOO PDF', file_create_url('public://system_pdf/' . $result->sg_loo_id), array('attributes' => array('class' => 'loo_pdf', 'target' => '_blank')));
+      $rows[$result->deviceid]['com_lrf'] = l('LRF PDF', file_create_url('public://upload_pdf/' . $result->com_lrf_id), array('attributes' => array('class' => 'loo_pdf', 'target' => '_blank')));
+      $rows[$result->deviceid]['com_loo'] = l('LOO PDF', file_create_url('public://upload_pdf/' . $result->com_loo_id), array('attributes' => array('class' => 'loo_pdf', 'target' => '_blank')));
+    }
+  }
+  $build['device_documents'] = array(
+    '#theme' => 'table',
+    '#header' => $header,
+    '#rows' => $rows,
+    '#empty' => t('Not available.'),
+    '#suffix'=> $button,
+  );
+  $build['screening_pager'] = array('#theme' => 'pager');
+  return $build;
+}
+
+
+
+/**
+ * Callback function for screening list export.
+ */
+function _screening_list_export() {
+  require_once (getcwd().'/'.libraries_get_path('PHPExcel') .'/Classes/PHPExcel.php');
+ if(arg(0) == 'screeningpack-export') {
+     $db_result = _pfe_screeningpack_get_data('screening_pack');
+     $sheetname = 'screening-list-';
+     $header = array(t('Device ID'), t('GP Name'),  t('GP Email'),  t('Rep Responsible'), t('State'), t('Date of Assignment'));
+  }
+  if(arg(0) == 'alivecor-export') {
+     $db_result = _pfe_screeningpack_get_data('alivecor');
+     $sheetname = 'alivecor-list-';
+     $header = array(t('Device ID'), t('GP Name'),  t('GP Email'),  t('Rep Responsible'), t('State'), t('Date of Assignment'));
+  }
+  
+  if(arg(0) == 'devicereport-export'){
+     $db_result = pfe_get_devices_data();
+     $sheetname = 'Free-devices-list-';
+     $header = array(t('Device ID'));
+  }
+  if(arg(0)=='speaker-content-export'){
+    $db_result = _pfe_speaker_content_get_data();
+    $sheetname = 'speaker-content-list-';
+     $header = array(t('Meeting ID'), t('Meeting type'),t('Duration of Meeting'),  t('Meeting Title'), t('Meeting Topics'), t('Rep Responsible'),t('Speaker Name'), t('Speaker Role'), t('Speaker Organization'),t('Facilitator Name'), t('Facilitator Role'),t('Facilitator Organization'), t('GP Name'),t('GP Email'), t('Device ID'),t('Loan Start Date'), t('Loan End Date'), t('Device Delivery Address'),t('State'), t('Attendance'),t('Date of Created'));              
+  }
+  $objPHPExcel = new PHPExcel();
+    foreach($db_result as $key => $val){
+    if(arg(0) == 'alivecor-export' || arg(0) == 'screeningpack-export' || arg(0) == 'meeting-export'){
+      $date = date('m/d/Y', $val->created);
+    }    
+    if(arg(0) == 'speaker-content-export'){
+      if(isset($val['gp_deatils'])){
+    foreach($val['gp_deatils'] as $gp_details_export){  
+    $rows[$val['meeting_id']."_".$gp_details_export['gp_id']] = array($val['meeting_id'], $val['template_meeting_type'],$val['Duration'],$val['meeting_title'], $val['meeting_topics_content_export'],$val['rep']." ".$val['rep_surname'],$val['speaker_title_export'],$val['speaker_role_export'],$val['speaker_org_export'],$val['facilitator_title_export'],$val['facilitator_role_export'],$val['facilitator_org_export'],$gp_details_export['name'], $gp_details_export['gp_email_id'],
+      $gp_details_export['deviceid'], $gp_details_export['loan_start_date'],$gp_details_export['loan_end_date'] ,$gp_details_export['delivery_address'],$gp_details_export['field_registrant_state_value'],$gp_details_export['attendance_status'],$val['assigned_date']);
+          }
+  }
+  else{
+    $rows[$val['meeting_id']] =array($val['meeting_id'], $val['template_meeting_type'],$val['Duration'],$val['meeting_title'], $val['meeting_topics_content_export'],$val['rep']." ".$val['rep_surname'],$val['speaker_title_export'],$val['speaker_role_export'],$val['speaker_org_export'],$val['facilitator_title_export'],$val['facilitator_role_export'],$val['facilitator_org_export'],'','','','','','','','',$val['assigned_date']);
+  }  
+    }else{
+      $rows[$val->deviceid] = array($val->deviceid, $val->gpname, $val->gp_email_id, $val->represponsible_name, $val->field_registrant_state_value, $date);
+    }
+
+  }
+ 
+  // Set document properties.
+  $objPHPExcel->getProperties()->setCreator("Admin")
+               ->setLastModifiedBy("Admin")
+               ->setTitle("Office 2007 XLSX gmp_testbit(a, index) Document")
+               ->setSubject("Office 2007 XLSX Test Document")
+               ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+               ->setKeywords("office 2007 openxml php")
+               ->setCategory("ScreeningPack report");
+  
+  for ($i=0; $i<=sizeof($header); $i++){   
+    $j =65+$i;
+    $letter = chr($j);
+    $objPHPExcel->setActiveSheetIndex(0)->setCellValue($letter.'2', $header[$i]);
+  }
+  $ews = $objPHPExcel->getSheet(0);
+  $ews->fromArray($rows, ' ', 'A3');    
+  $filename = $sheetname . date('d-M-Y') . '-' . rand() . '.xlsx';
+  header('Content-type: application/vnd.ms-excel');
+  header('Content-Disposition: attachment; filename="' . $filename . '"');
+  $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+  ob_end_clean();
+  $objWriter->save('php://output');
+  drupal_exit();
+}
+
+/**
+ * Callback function to get data from DB.
+ */
+function _pfe_screeningpack_get_data($node_type) {
+  $query = db_select('assigned_device','ad');
+  $query->join('field_data_field_registrant_state','rs','ad.gpid = rs.entity_id');
+  $query->join('field_data_field_device_id','di','ad.deviceid = di.field_device_id_value');
+  $query->join('node','nd','nd.nid = di.entity_id');
+  $query->fields('rs', array('field_registrant_state_value'));
+  $query->fields('ad');
+  $query->fields('nd', array('created'));
+  if($node_type=='meeting'){
+    $meeting_nid= arg(1);
+    $meeting_node=node_load($meeting_nid);
+    $meeting_title=$meeting_node->title;
+    $query->condition('ad.meetingid', $meeting_title, '=');
+  }else{
+  $query->condition('ad.node_type', $node_type, '=');  
+  }
+  return $db_result = $query->execute()->fetchAll();
+}
+
+/**
+ * Callback function to get data from DB.
+ */
+function _pfe_device_document_get_data(){
+  $query = db_select('assigned_device','ad');
+  $query->join('pfe_document_upload','du','ad.deviceid = du.deviceid');
+  $query->fields('du');
+  $query->fields('ad');
+  return $db_result = $query->execute()->fetchAll();
+}
+
+
+
+
+
+/*Get free devices from System*/
+function _pfe_get_free_devices(){
+  $rows = array();
+  $header = array(
+    array('data' => 'Device ID'),
+  );
+  $db_result = pfe_get_devices_data('report');
+  if (count($db_result)) {
+    foreach($db_result as $result) {
+      $rows[$result->deviceid]['deviceid'] = $result->deviceid;
+    }
+    $button = '<a class = "download-report" href="/devicereport-export">Download</a>';
+  }
+ 
+  $table['screening_table'] = array(
+    '#theme' => 'table',
+    '#header' => $header,
+    '#rows' => $rows,
+    '#empty' => t('Not available.'),
+    '#suffix'=> $button,
+  );
+  $table['free_devices'] = array('#theme' => 'pager');
+  return $table;
+}
+
+/**
+ * Callback function to get data from DB.
+ */
+function pfe_get_devices_data($string=''){
+ $query = db_select('devices','de');
+  $query->leftjoin('assigned_device','ad','de.deviceid = ad.deviceid');  
+	$query->fields('de', array('deviceid'));  
+	$db_or = db_or();  
+	$db_or->condition('ad.deviceid', NULL);  
+	$db_and = db_and();  
+	$db_and->condition('ad.returnstatus',1);  
+	$db_and->condition('ad.deliveredstatus',1);  
+	$db_or->condition($db_and);  
+	$query->condition($db_or);  
+  if($string!=''){  
+    $result = $query
+      ->extend('PagerDefault')
+      ->limit(10)
+      ->execute();
+  }
+  else{
+    $result=$query->execute();
+  }
+  return $db_result = $query->execute()->fetchAll();
+}
+
+/**
+ * Callback function to get data from DB.
+ */
+function _pfe_speaker_content_get_data($string='') {
+  $today_date=strtotime(date("Y-m-d")); 
+  $query = db_select('node','nd'); 
+  $query->join('field_data_field_meeting_date','md','nd.nid = md.entity_id');
+  $query->fields('nd', array('nid'));  
+  $query->condition('md.field_meeting_date_value', $today_date, '<');
+  $query->orderby('nd.created', 'DESC'); 
+  $result=$query->execute()->fetchAll();
+  foreach($result as $meet_node_id){
+   $meet_nid[]=$meet_node_id->nid;
+  } 
+  $nodes = node_load_multiple($meet_nid); 
+  
+  foreach($nodes as $meeting_node){  
+  
+    //speaker details
+     $speaker_data_content=array();
+    $speaker_ids=array();
+  foreach($meeting_node->field_speaker_details[LANGUAGE_NONE] as $speakers) {
+    $speaker_ids[] = $speakers['value'];
+  }
+  $speaker_details = field_collection_item_load_multiple($speaker_ids);
+  foreach($speaker_details as $key => $value) {
+    $speaker = new stdClass();
+    $speaker->name_title  = $value->field_speaker_title_name[LANGUAGE_NONE][0]['value'];
+    $speaker->full_name  = $value->field_speaker_full_name[LANGUAGE_NONE][0]['value'];
+    $speaker->title  = $value->field_speaker_title[LANGUAGE_NONE][0]['value'];
+    $speaker->organization  = $value->field_speaker_organisation[LANGUAGE_NONE][0]['value'];
+    $speaker_data_content[] = $speaker;
+  }
+   foreach($speaker_data_content as $key => $speaker_details) {
+    
+             $speaker_details_content[$meeting_node->nid]['name'][]=$speaker_details->name_title." ".$speaker_details->full_name;
+             $speaker_details_content[$meeting_node->nid]['role'][]=$speaker_details->title;
+             $speaker_details_content[$meeting_node->nid]['organization'][]=$speaker_details->organization;
+             }
+    //speaker details
+              //facilitator details
+              $facilitators_details_data=array();
+    $facilitators_ids=array();
+  foreach($meeting_node->field_facilitator_details[LANGUAGE_NONE] as $facilitators) {
+    $facilitators_ids[] = $facilitators['value'];
+  }
+  $facilitators_details = field_collection_item_load_multiple($facilitators_ids);
+  foreach($facilitators_details as $key => $value) {
+    $facilitators = new stdClass();
+    $facilitators->name_title  = $value->field_facilitator_title_name[LANGUAGE_NONE][0]['value'];
+    $facilitators->full_name  = $value->field_facilitator_full_name[LANGUAGE_NONE][0]['value'];
+    $facilitators->title  = $value->field_facilitator_title[LANGUAGE_NONE][0]['value'];
+    $facilitators->organization  = $value->field_facilitator_organisation[LANGUAGE_NONE][0]['value'];
+    $facilitators_details_data[] = $facilitators;
+  }
+  
+   foreach($facilitators_details_data as $key => $facilitator_details) {
+             $facilitator_details_content[$meeting_node->nid]['name'][]=$facilitator_details->name_title." ".$facilitator_details->full_name;
+
+             $facilitator_details_content[$meeting_node->nid]['role'][]=$facilitator_details->title;
+             $facilitator_details_content[$meeting_node->nid]['organization'][]=$facilitator_details->organization;
+             }
+             
+    //facilitator details
+    $term_id= $meeting_node->field_meeting_type['und'][0]['tid'];
+    $term_category = taxonomy_term_load($term_id);
+    $meeting_type = $term_category->name;
+    if($meeting_type == '1 hour meeting'){
+      $speaker_content[$meeting_node->nid]['duration']='1 Hour';
+    }else{ 
+      $speaker_content[$meeting_node->nid]['duration']='2 Hour';
+    }
+    $speaker_content[$meeting_node->nid]['meeting_id']=$meeting_node->title;
+    $speaker_content[$meeting_node->nid]['assigned_date'] = date('m/d/Y', $meeting_node->created);
+
+  $meet_type_key = $meeting_node->field_template_meeting_type[LANGUAGE_NONE]['0']['value']; // Or whatever
+  $meet_type_field = field_info_field('field_template_meeting_type');
+  $meet_type_label = $meet_type_field['settings']['allowed_values'][$meet_type_key];
+    $speaker_content[$meeting_node->nid]['template_meeting_type']=$meet_type_label;
+    //$node_data=pfe_pip_meetings_get_node_data($meeting_node->nid);
+    $state_term_id= $meeting_node->field_state['und'][0]['tid'];
+    $state_term_category = taxonomy_term_load($state_term_id);
+    $speaker_content[$meeting_node->nid]['state'] = $state_term_category->name;    
+    $meeting_topics_data=array();
+        if($meeting_node->field_template_meeting_type['und']['0']['value']=='modular'){         
+            foreach ($meeting_node->field_module_type['und'] as $term_id) {
+                $tids[] = $term_id['tid'];
+            };
+            $terms = taxonomy_term_load_multiple($tids);
+            $name=array();
+            foreach ($terms as $term) {
+               $name[] = $term->name;
+            };
+            $module_type = $name;
+            foreach($module_type as $module_type_name){
+                 $meeting_topics_data[$meeting_node->nid][]=$module_type_name;   
+                 }
+        }elseif($meeting_node->field_template_meeting_type['und']['0']['value']=='speaker'){   
+        $speaker_session_ids=array();      
+         $speaker_topic=$meeting_node->field_speaker_topic[LANGUAGE_NONE]['0']['value'];
+        $speaker_content[$meeting_node->nid]['meeting_title']=$speaker_topic;
+      //Session details
+            foreach($meeting_node->field_session_details[LANGUAGE_NONE] as $speaker_sessions) {
+              $speaker_session_ids[] = $speaker_sessions['value'];
+            }
+            $speaker_session_details = field_collection_item_load_multiple($speaker_session_ids);
+            $speaker_session_details_data=array();
+            foreach($speaker_session_details as $key => $value) {
+              $speaker_session = new stdClass();
+              $speaker_session->session_title  = $value->field_session_title[LANGUAGE_NONE][0]['value'];
+              $speaker_session->session_topic  = $value->field_session_content[LANGUAGE_NONE][0]['value'];
+              $speaker_session->session_duration  = $value->field_duration[LANGUAGE_NONE][0]['value'];
+              $speaker_session_details_data[] = $speaker_session;
+            }  
+            foreach($speaker_session_details_data as $key => $speaker_session) {
+             $meeting_topics_data[$meeting_node->nid][]=$speaker_session->session_title;
+             }
+          }
+    $speaker_content[$meeting_node->nid]['meeting_topics_content']=implode("<br>",$meeting_topics_data[$meeting_node->nid]);
+    $speaker_content[$meeting_node->nid]['meeting_topics_content_export']=implode(",",$meeting_topics_data[$meeting_node->nid]);
+
+    $speaker_content[$meeting_node->nid]['speaker_title_data']=implode("<br>",$speaker_details_content[$meeting_node->nid]['name']);
+    $speaker_content[$meeting_node->nid]['speaker_title_export']=implode(",",$speaker_details_content[$meeting_node->nid]['name']);
+
+    $speaker_content[$meeting_node->nid]['speaker_role_data']=implode("<br>",$speaker_details_content[$meeting_node->nid]['role']);
+    $speaker_content[$meeting_node->nid]['speaker_role_export']=implode(",",$speaker_details_content[$meeting_node->nid]['role']);
+
+    $speaker_content[$meeting_node->nid]['speaker_org_data']=implode("<br>",$speaker_details_content[$meeting_node->nid]['organization']);
+    $speaker_content[$meeting_node->nid]['speaker_org_export']=implode(",",$speaker_details_content[$meeting_node->nid]['organization']);
+
+     $speaker_content[$meeting_node->nid]['facilitator_title_data']=implode("<br>",$facilitator_details_content[$meeting_node->nid]['name']);
+    $speaker_content[$meeting_node->nid]['facilitator_title_export']=implode(",",$facilitator_details_content[$meeting_node->nid]['name']); 
+
+     $speaker_content[$meeting_node->nid]['facilitator_role_data']=implode("<br>",$facilitator_details_content[$meeting_node->nid]['role']);
+    $speaker_content[$meeting_node->nid]['facilitator_role_export']=implode(",",$facilitator_details_content[$meeting_node->nid]['role']);
+
+    $speaker_content[$meeting_node->nid]['facilitator_org_data']=implode("<br>",$facilitator_details_content[$meeting_node->nid]['organization']);
+    $speaker_content[$meeting_node->nid]['facilitator_org_export']=implode(",",$facilitator_details_content[$meeting_node->nid]['organization']);
+
+    $user_fields = user_load($meeting_node->field_meeting_lead_rep['und'][0]['uid']);
+    $speaker_content[$meeting_node->nid]['rep'] =  $user_fields->field_user_name[LANGUAGE_NONE][0]['value'];
+    $speaker_content[$meeting_node->nid]['rep_surname'] =  $user_fields->field_user_surname[LANGUAGE_NONE][0]['value'];
+
+   
+   $query = db_select('assigned_device','ad');
+  $query->join('field_data_field_registrant_state','rs','ad.gpid = rs.entity_id');
+  $query->join('field_data_field_device_id','di','ad.deviceid = di.field_device_id_value');
+  $query->join('field_data_field_registrant_attended','ga','ad.gpid = ga.entity_id');
+  $query->join('node','nd','nd.nid = di.entity_id');
+  $query->fields('rs', array('field_registrant_state_value'));
+  $query->fields('ga', array('field_registrant_attended_value'));
+  $query->fields('ad');
+  $query->fields('nd', array('created'));  
+  $query->condition('ad.nodeid', $meeting_node->nid, '=');
+  
+   $db_result = $query->execute()->fetchAll();
+   $device_assign_gp_data=array();
+    foreach($db_result as $key => $val){    
+   
+       $device_assign_gp_data[$val->gpid]['name']=$val->gpname;
+       $device_assign_gp_data[$val->gpid]['gp_email_id']=$val->gp_email_id;
+       $device_assign_gp_data[$val->gpid]['represponsible_name']=$val->represponsible_name;
+       $device_assign_gp_data[$val->gpid]['deviceid']=$val->deviceid;
+       $device_assign_gp_data[$val->gpid]['field_registrant_state_value']=$val->field_registrant_state_value;
+       $device_assign_gp_data[$val->gpid]['created']=$val->created;
+       $device_assign_gp_data[$val->gpid]['gp_id']=$val->gpid;
+       if($val->field_registrant_attended_value=='1'){
+        $attendance_status="Yes";
+       }else{
+        $attendance_status="No";
+       }
+
+       $device_assign_gp_data[$val->gpid]['attendance_status']=$attendance_status;
+       $device_assign_gp_data[$val->gpid]['loan_start_date']=date('m/d/Y', strtotime($val->startdate));
+       $device_assign_gp_data[$val->gpid]['loan_end_date']=date('m/d/Y', strtotime($val->enddate));
+        $device_assign_gp_data[$val->gpid]['delivery_address']=$val->address;
+       $speaker_content[$meeting_node->nid]['gp_deatils'] =  $device_assign_gp_data;
+    }
+  }
+  return  $speaker_content;    
+}
+
+function _pfe_get_device_document_upload_form($form, &$form_state){
+  $form = array('#attributes' => array('enctype' => 'multipart/form-data'));
+  $form['deviceid_text'] = array(
+    '#type' => 'markup',
+    '#value' => 'Device ID',
+  );
+  $form['loo_file'] = array(
+    '#type' => 'file',
+    '#title' => 'Letter of Offer (LOO)',
+    '#description' => t('Allowed extensions: gif png jpg jpeg'),
+   
+  );
+  $form['doc_deviceid'] = array(
+    '#type' => 'hidden',
+    '#requried' => TRUE,
+    '#value' => arg(1),
+    '#size' => 255,
+  );
+  $form['document_submit_button'] = array(
+    '#type' => 'submit', 
+    '#value' => t('upload'), 
+  );
+  return $form;
+}
+
+function _pfe_get_device_document_upload_form_submit($form, &$form_state){
+$file = $form_state['values']['file'];
+
+    $validators = array();
+    $file = file_save_upload('file', $validators, 'public://');
+}

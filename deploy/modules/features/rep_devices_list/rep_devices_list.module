@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Rep devices List feature.
+ */
+
+include_once 'rep_devices_list.features.inc';

@@ -1,0 +1,5 @@
+name = PIP Login Management
+description = Adds the features of meetings login.
+core = 7.x
+package = Pfizer
+    

@@ -1,0 +1,135 @@
+body, div, dl, dt, dd, h1, h2, h3, h4, h5, h6, p, pre, code, blockquote {
+	margin:0;
+	padding:0;
+	border-width:0;
+}
+td, th {
+	border:0;
+}
+body {
+	-epub-hyphens:auto;
+  font-family: arial,sans-serif;
+}
+
+#page-1, #page-2, #page-3, #page-4 {
+width:820px;
+page-break-inside: avoid !important;
+}
+.page1-bg-btm {
+width:820px;
+height:147px;
+display:block;
+}
+.title-wrapper {
+  height:275px;
+}
+.title-wrapper .banner-title1 {
+  font-size:30px;
+  line-height:28px;
+  color:#76004B;
+  padding:65px 0 0 310px;
+  font-family: /*'FlamaBas',*/sans-serif;
+}
+.title-wrapper .banner-title1 span {
+  font-size:30px;
+  line-height:28px;
+  color:#F26A38;
+}
+.title-wrapper .author {
+  font-size:11px;
+  line-height:19px;
+  color:#76004B;
+  padding:0 0 0 330px;
+  font-family: /*'FlamaBas',*/sans-serif;
+}
+.pink-bar {
+  text-align: center;
+  height:102px;
+  padding:23px 0 0 0;
+}
+.title-wrapper .author {
+  font-size:9px;
+  line-height:19px;
+  color:#76004B;
+  padding:0 0 0 240px;
+  font-family: arial,sans-serif;
+}
+
+.pink-bar {
+  text-align: center;
+  height:92px;
+  padding:23px 0 0 0;
+}
+.pink-bar .orange-title {
+  font-size:22px;
+  line-height:23px;
+  color:#F26A38;
+  font-family: arial,sans-serif;
+  margin: 0 0 3px;
+}
+.pink-bar .white-title {
+  font-size:18px;
+  line-height:26px;
+  color:#fff;
+  font-family: arial,sans-serif;
+}
+.tbl-wrapper {
+  width:80%;
+  margin:20px auto 0;
+  font-size:14px;
+  line-height:18px;
+  color:#F26A38;
+  overflow:hidden;
+  
+}
+.tbl-wrapper table {
+  width:104%;
+  font-family: arial,sans-serif;
+  position:relative;
+  left:-3px;
+}
+
+.tbl-wrapper table th {
+  background: #76004b none repeat scroll 0 0;
+  border-collapse: collapse;
+  padding: 5px 10px 0 10px;
+  text-align: left;
+  line-height:20px;
+}
+.tbl-wrapper table td {
+  border-collapse: collapse;
+  padding: 20px 10px 5px 10px;
+  text-align: left;
+  border: #76004b solid 2px;
+  vertical-align:middle;
+}
+.tbl-wrapper table td.time {
+  vertical-align:bottom;
+}
+.tbl-wrapper td.tbl-label, .orange-txt {
+  font-size:14px;
+  line-height:18px;
+  color:#F26A38;
+  font-weight:bold;
+}
+.tbl-wrapper td.info,.black-txt {
+  font-size:14px;
+  color:#000;
+}
+.meeting-title {
+	margin:30px auto 0;
+  font-size:14px;
+  color:#F26A38;
+  font-family: arial,sans-serif;
+  background: #76004b;
+  width:80%;
+  padding:5px 0;
+  text-indent:10px;
+}
+.title-wrapper .author {
+  font-size:11px;
+  line-height:19px;
+  color:#76004B;
+  padding:0 0 0 330px;
+  font-family: /*'FlamaBas',*/sans-serif;
+}

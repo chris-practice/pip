@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the pfe_pip_add_device feature.
+ */
+
+include_once 'pfe_pip_add_device.features.inc';

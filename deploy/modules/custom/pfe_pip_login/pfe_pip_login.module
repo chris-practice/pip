@@ -1,0 +1,219 @@
+<?php
+
+
+/**
+ * Implements hook_block_info().
+ */
+function pfe_pip_login_block_info() {
+  $blocks['pip_meeting_login'] = array(
+    'info' => t('Login check- meetings'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  $blocks['pip_meeting_login_view_meetings'] = array(
+    'info' => t('View meetings Link'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+   $blocks['welcome_block_user'] = array(
+    'info' => t('User Logged In Block'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
+   return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function pfe_pip_login_block_view($delta = '') {
+  $block = array();
+
+  switch ($delta) {
+    case 'pip_meeting_login':
+      if (!user_is_logged_in()) {
+        drupal_goto('<front>');
+      }
+	  break;
+    case 'pip_meeting_login_view_meetings':
+      global $user;
+      //$block['subject'] = t('View Meeting Link');
+      if ($user->uid) {
+        if (isset($_SESSION['pfe_pip_login_meeting_link']) && $_SESSION['pfe_pip_login_meeting_link']) {
+        $block['content'] = l('View meeting details', $_SESSION['pfe_pip_login_meeting_link']);
+        }
+        else {
+          $block['content'] = '';
+        }
+      }
+
+    break;
+     case 'welcome_block_user':
+      global $user;
+      if ($user->uid) {        
+        $block['content'] = t("Hello ".$user->name.",");       
+      }
+    break;
+  }
+  return $block;
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+
+function pfe_pip_login_form_alter(&$form, &$form_state, $form_id) {
+
+
+  switch ($form_id) {
+    // Add extra validation for all user forms
+    case 'user_login_block':    
+		$form['links']['#markup']=  
+		l(t('Forgot password?'), 'user/password', array  
+				   ('attributes' => array('title' => t('Request new password via e-mail.'))));  
+		   $form['links']['#weight'] = 10000;  
+		   //$form['#validate'][]= 'pfe_pip_login_authenticate_validate';  
+			 
+		   
+		array_unshift($form['#validate'], 'pfe_pip_login_authenticate_validate');  
+		unset($form['#action']);  
+		  
+		break; 
+
+    case 'user_pass':
+		$form['#submit'][] = '_password_recover_submit';
+    case 'user_login':
+        array_unshift($form['#validate'], 'pfe_pip_login_authenticate_validate');
+        break;
+  }
+}
+ 
+  function _password_recover_submit($form, &$form_state){
+  global $base_url;
+  $form_state['redirect'] = $base_url;
+}
+function pfe_pip_login_authenticate_validate($form, &$form_state){
+  // has the user failed local authentication?
+  if (empty($form_state['uid'])) {
+    $username = $form_state['values']['name'];
+    $password = trim($form_state['values']['pass']);
+    $res = user_authenticate($username,$password);
+    if($res ) {  
+    }
+    else{
+    global $user;
+    $query = new EntityFieldQuery();
+    $query->entityCondition('entity_type', 'node')
+      ->entityCondition('bundle', 'meetings')
+      ->propertyCondition('status', NODE_PUBLISHED)
+      ->propertyCondition('title', trim($form_state['values']['pass']))
+      ->range(0, 1);
+
+    $result = $query->execute();
+      if (isset($result['node'])) {
+      	$meet_nid =  array_keys($result['node']);
+      	$url ='node/'.$meet_nid[0].'/register';
+      	$global_guestusername ='guest_user';
+        $user = user_load_by_name($global_guestusername);
+        $login_array = array('name' => $user->name);
+
+       $reg_check =  pfe_pip_login_registration_check($meet_nid,$form_state['values']['name']);
+        user_login_finalize($login_array);
+        $_SESSION['guest_email'] = $form_state['values']['name'];
+        $_SESSION['pfe_pip_login_meeting_link'] = $url;
+        drupal_goto($url);
+      }
+      else {
+        form_set_error('name','Please check that you have entered a valid email address and password/meeting ID.');
+      }
+    }
+  }
+}
+/**
+ * Implements hook_theme().
+ */
+function pfe_pip_login_theme() {
+  return array(
+    'meeting_agenda' => array(
+      'variables' => array('items' => NULL),
+      'template' => 'templates/meeting-agenda',
+    ),
+	 'meeting_invitations' => array(
+      'variables' => array('items' => NULL),
+      'template' => 'templates/meeting-invitations',
+    ),
+	 'meeting_attendance' => array(
+      'variables' => array('items' => NULL),
+      'template' => 'templates/meeting-attendance',
+    ),
+	 'registered_gp' => array(
+     'variables' => array('items' => NULL),
+     'template' => 'templates/loan-application',
+    ),
+   'offer_letter' => array(
+   'variables' => array('items' => NULL),
+   'template' => 'templates/offer-letter',
+   ), 
+    'gp_certificate' => array(
+   'variables' => array('items' => NULL),
+   'template' => 'templates/gp-certificate',
+   ),
+	'download_faxback' => array(
+      'variables' => array('items' => NULL),
+      'template' => 'templates/download-faxback',
+    ),
+   'meeting_type_invitations' => array(
+      'variables' => array('items' => NULL),
+      'template' => 'templates/meeting-type-invitations',
+    ),
+  );
+}
+
+
+
+
+function pfe_pip_login_permission() {
+  return array(
+	 'ui meeting Registered GPS List' => array(
+      'title' => t('Allow User to see Registered GP List'),
+      'description' => t('Allow User to see Registered GP List.'),
+    ),
+	'ui send_reminder' => array(
+      'title' => t('Allow User to send Reminders'),
+      'description' => t('Allow User to send Reminders.'),
+    ),
+	'ui register_gp' => array(
+      'title' => t('Allow User to Register GP'),
+      'description' => t('Allow User to Register GP'),
+    ),
+	'ui register_gp' => array(
+      'title' => t('Allow User to Register GP'),
+      'description' => t('Allow User to Register GP'),
+    ),
+	'ui export attendance list' => array(
+      'title' => t('Allow User to Export Attendance List'),
+      'description' => t('Allow User to Export Attendance List'),
+    ),
+	'ui save attendance status' => array(
+      'title' => t('Allow User to Save attendance status'),
+      'description' => t('Allow User to Save attendance status'),
+    ),
+	'add new representative' => array(
+      'title' => t('Allow User to add new representative'),
+      'description' => t('Allow User to add new representative'),
+    ),
+  'ui export certificate form' => array(
+      'title' => t('Allow User to Export Certificate Form'),
+      'description' => t('Allow User to Export Certificate Form'),
+    ),
+  );
+}
+
+function pfe_pip_login_registration_check($entity_id,$email){
+    $query = new EntityFieldQuery();
+    $result = $query
+      ->entityCondition('entity_type', 'registration')
+      ->propertyCondition('entity_id', $entity_id)
+	    ->fieldCondition('field_registrant_email','value', $email, '=')
+      ->range(0, 1);
+	$result = $query->execute();
+    if (isset($result['registration'])) {  return 1;  }else { return 0;  }
+}

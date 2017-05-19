@@ -1,0 +1,285 @@
+body, div, dl, dt, dd, h1, h2, h3, h4, h5, h6, p, pre, code, blockquote {
+	margin:0;
+	padding:0;
+	border-width:0;
+}
+td, th {
+	border:0;
+}
+body {
+	-epub-hyphens:auto;
+  font-family: /*'FlamaBas',*/sans-serif;
+}
+
+#page-1 {
+width:820px;
+}
+.page1-bg-btm {
+width:820px;
+height:147px;
+display:block;
+}
+.title-wrapper {
+  height:275px;
+}
+.title-wrapper .banner-title1 {
+  font-size:30px;
+  line-height:28px;
+  color:#76004B;
+  padding:65px 0 0 310px;
+  font-family: /*'FlamaBas',*/sans-serif;
+}
+.title-wrapper .banner-title1 span {
+  font-size:30px;
+  line-height:28px;
+  color:#F26A38;
+}
+.title-wrapper .author {
+  font-size:11px;
+  line-height:19px;
+  color:#76004B;
+  padding:0 0 0 330px;
+  font-family: /*'FlamaBas',*/sans-serif;
+}
+.pink-bar {
+  text-align: center;
+  height:122px;
+  padding:23px 0 0 0;
+}
+.pink-bar .orange-title {
+  font-size:29px;
+  line-height:25px;
+  color:#F26A38;
+  font-family: /*'FlamaBas',*/sans-serif;
+  margin: 0 0 3px;
+}
+.pink-bar .white-title {
+  font-size:23px;
+  line-height:32px;
+  color:#fff;
+  font-family: /*'FlamaBas',*/sans-serif;
+}
+.tbl-wrapper {
+  width:660px;
+  margin:0 auto;
+  font-size:14px;
+  line-height:43px;
+  color:#F26A38;
+  padding:10px 0 0 0;
+}
+.tbl-wrapper table {
+  width:100%;
+  font-family: /*'MinionPro',*/sans-serif;
+}
+.tbl-wrapper td.tbl-label {
+  font-size:19px;
+  line-height:33px;
+  color:#F26A38;
+  font-weight:bold;
+  width:45px;
+}
+.tbl-wrapper td.info {
+  font-size:18px;
+  line-height:33px;
+  color:#000;
+  
+}
+.tbl-wrapper td.tbl-label.bms-repr {
+  width:280px;
+}
+.tbl-wrapper td.tbl-label.ur-presenter {
+  width:160px;
+}
+.orange-text {
+  font-size:19px;
+  color:#F26A38;
+  font-family: /*'FlamaBas',*/sans-serif;
+  text-align:center;
+  line-height: 20px;
+  margin: 10px auto 0;
+  width: 650px;
+}
+.maroon-text {
+  color:#76004b;
+  font-size:16px;
+  font-family: /*'FlamaBas',*/sans-serif;
+  text-align:center;
+  line-height: 16px;
+  margin: 30px auto;  
+}
+.maroon-title-text {
+  color:#76004b;
+  font-size:19px;
+  font-family: /*'FlamaBas',*/sans-serif;
+  text-align:center;
+  margin: 30px auto 0;  
+}
+.work-closely.maroon-text {
+  max-width:755px;
+}
+.pdf-second .work-closely.maroon-text {
+  margin-top:0 !important;
+}
+.pdf-second .meeting-id {
+  color:#F26A38;
+  font-size:12px;
+  font-family: /*'FlamaBas',*/sans-serif;
+  margin: 3px 0 72px;
+  text-align: center;
+}
+.maroon-text.margin0 {
+  margin: 0;
+}
+.register-text {
+  font-size:19px;
+  color:#F26A38;
+  font-family: /*'MinionPro',*/sans-serif;
+  text-align:center;
+  line-height: 20px;
+  font-weight:bold;
+  text-transform:uppercase;
+}
+.meeting-id {
+  color:#F26A38;
+  font-size:12px;
+  font-family: /*'FlamaBas',*/sans-serif;
+  margin: 3px 0 98px;
+  text-align: center;
+}
+.meeting-id-num {
+  color:#76004b;
+}
+#page-2 {
+width:820px;
+background-size:contain;
+}
+.title-wrapper .banner-title2 {
+  font-size:26px;
+  line-height:28px;
+  color:#76004B;
+  padding:55px 0 0 240px;
+  font-family: /*'FlamaBas',*/sans-serif;
+}
+.title-wrapper .banner-title2 span {
+  font-size:26px;
+  line-height:28px;
+  color:#F26A38;
+}
+
+#page-2 .title-wrapper .author {
+  color: #76004b;
+  font-family: /*"FlamaBas",*/sans-serif;
+  font-size: 12px;
+  line-height: 19px;
+  padding: 0 0 0 240px;
+}
+.meeting-agenda {
+  color: #f26a38;
+  font-family: /*'MinionPro',*/sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 18px;
+  margin: 9px 0 0 35px;
+}
+.session-tbl-wrapper {
+  margin: 5px 0 0 24px;
+}
+.session-tbl-wrapper th {
+  font-size:14px;
+  color:#F26A38;
+  font-family: /*'FlamaBas',*/sans-serif;
+  text-align:left;
+}
+.session-tbl-wrapper td {
+  font-size:10px;
+  color:#000;
+  font-family: /*'FlamaBas',*/sans-serif;
+
+}
+.session-tbl-wrapper th {
+  height: 36px;
+  padding:0 0 0 20px;
+}
+.session-tbl-wrapper td {
+  padding:0 0 0 20px;
+  
+}
+.session-tbl-wrapper .tbl-label-1 {
+  height: 34px;
+  width: 60px;
+  vertical-align:middle;
+}
+.session-tbl-wrapper .tbl-label-2 {
+  height: 52px;
+  width: 60px;
+  vertical-align:middle;
+  
+}
+.session-tbl-wrapper .tbl-label-3 {
+  height: 52px;
+  width: 60px;
+  vertical-align:middle;
+  
+}
+.session-tbl-wrapper .tbl-label-4 {
+  height: 36px;
+  width: 60px;
+  vertical-align:middle;
+}
+.session-tbl-wrapper .tbl-label-5 {
+  height: 50px;
+  width: 60px;
+  vertical-align:middle;
+}
+.td-orange-title {
+  color:#F26A38;
+  font-family: /*'MinionPro',*/sans-serif;
+  font-size: 10px;
+  font-weight: bold;
+  
+}
+.td-blck-title {
+  color:#000;
+  font-size:10px;
+  font-family: /*'FlamaBas',*/sans-serif;
+}
+.mobile-ECG-wrapper {
+  margin: 15px 0 34px 310px;
+}
+.mobile-ECG-orange-text {
+  color:#F26A38;
+  font-size:18px;
+  font-weight: bold;
+  font-family: /*'FlamaBas',*/sans-serif;
+  margin: 0 0 7px 0;
+}
+.register-wrp {
+  margin: 0 auto;
+  text-align: center;
+  width: 500px;
+}
+.register-wrp .maroon-text{
+  font-size:18px;
+}
+.mobile-ECG-text {
+  color:#000;
+  font-size: 12px;
+  line-height: 13px;
+  font-family: /*'FlamaBas',*/sans-serif;
+  width:400px;
+}
+.btm-text {
+  color: #58595B;
+  font-family: /*"FlamaBas",*/sans-serif;
+  font-size: 7px;
+  line-height: 9px;
+  margin: 0px auto 17px;
+  text-align: center;
+  width: 505px;
+}
+.page2-bg-btm {
+width:820px;
+display:block;
+margin-top:0px;
+float:left;
+}

@@ -1,0 +1,1857 @@
+<?php
+
+/**
+ * @file
+ * Tha main file of the meeting module.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function pfe_pip_meetings_menu() {
+  $items = array();
+  $items['node/%/download-invitations'] = array(
+    'title'            => 'Download Invitations',
+    'page callback'    => 'pfe_pip_meetings_dl_invitations',
+    'page arguments'   => array(1),
+    'access callback'  => 'user_access',
+    'access arguments' => array('download invitatons'),
+    'file' => 'includes/meetings.functions.inc',
+  );
+
+  $items['node/%/export-attendance-xls'] = array(
+    'title'            => 'Export Attendance XLS',
+    'page callback'    => 'pfe_pip_meetings_export_attendance_xls',
+    'page arguments'   => array(1),
+    'access callback'  => TRUE,
+    'file' => 'includes/meetings.functions.inc',
+  );
+  $items['registration/%/node/%/export-registered-gp-pdf'] = array(
+    'page callback'    => 'registered_gp_pdf',
+    'page arguments'   => array(1, 3),
+    'access callback'  => TRUE,
+    'file' => 'includes/meetings.functions.inc',
+  );
+  $items['add-device/%'] = array(
+    'title'            => 'Add Device',
+    'page callback'    => 'drupal_get_form',
+    'page arguments' => array('add_device_rep'),
+    'access callback' => 'user_access',
+    'access arguments' => array('add device rep'),
+    'file' => 'includes/add.device.inc',
+  );
+  $items['device'] = array(
+    'title'            => 'Add Device',
+    'page callback'    => 'drupal_get_form',
+    'page arguments' => array('add_device'),
+    'access arguments' => array('add device rep'),
+    'file' => 'includes/add.device.inc',
+  );
+  $items['node/%/export-attendance-pdf'] = array(
+    'title'            => 'Export Attendance XLS',
+    'page callback'    => 'pfe_pip_meetings_export_attendance_pdf',
+    'page arguments'  => array(1),
+    'access callback'  => TRUE,
+    'file' => 'includes/meetings.functions.inc',
+  );
+
+  $items['node/%/download-agenda'] = array(
+    'title'            => 'Download Agenda',
+    'page callback'    => 'pfe_pip_meetings_dl_agenda',
+    'page arguments'  => array(1),
+    'access callback'  => 'user_access',
+    'access arguments' => array('access download agenda'),
+    'file' => 'includes/meetings.functions.inc',
+  );
+
+  $items['view-meetings'] = array(
+    'title'            => 'Meetings',
+    'page callback'    => 'pfe_pip_meetings_view_meetings',
+    'access callback'  => array('pfe_pip_meetings_view_access_callback', 'user_access'),
+    'access arguments' => array('access view meetings'),
+    'file' => 'includes/meetings.functions.inc',
+  );
+
+  $items['already-registered'] = array(
+    'title'            => 'Register',
+    'page callback'    => 'registered_message',
+    'access callback'  => TRUE,
+  );
+  $items['node/test'] = array(
+    'title'            => 'Export Attendance XLS',
+    'page callback'    => 'pfe_pip_meetings_status',
+    'page arguments'   => array(1),
+    'access callback'  => TRUE,
+  );
+
+  $items['add/representative'] = array(
+    'title' => 'Create user',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('pfe_pip_meetings_representative_registration'),   
+    'access callback' => 'user_access',
+    'access arguments' => array('add representative'),
+  );
+
+  $items['view/post-meeting'] = array(
+    'title' => 'View post dated meetings',
+    'page callback' => 'pfe_pip_meetings_user_load',
+    'page arguments' => array(1),
+    'access callback'  => TRUE,
+  );
+
+  $items['node/%/export-certificate-form-pdf'] = array(
+    'title'            => 'Export Certificate PDF',
+    'page callback'    => 'pfe_pip_meetings_certificate_form_pdf',
+    'page arguments'   => array(1),
+    'access callback'  => TRUE,
+    'file' => 'includes/meetings.functions.inc',
+  );
+
+  $items['gp_name/autocomplete'] = array(
+    'title' => 'Autocomplete for GP Firstname',
+    'page callback' => 'pfe_pip_meeting_firstname_autocomplete',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['rep_name/autocomplete'] = array(
+    'title' => 'Autocomplete for REP name',
+    'page callback' => 'pfe_pip_meeting_repname_autocomplete',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['gp_sirname/autocomplete'] = array(
+    'title' => 'Autocomplete for Gp Lastname',
+    'page callback' => 'pfe_pip_meeting_sirname_autocomplete',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['node/%/download-faxback'] = array(
+    'title'            => 'Download Faxback Form',
+    'page callback'    => 'pfe_pip_meetings_dl_faxback',
+    'page arguments'  => array(1),
+    'access callback'  => 'user_access',
+    'access arguments' => array('download faxback'),
+    'file' => 'includes/meetings.functions.inc',
+  );
+
+  $items['device-document-uploads/%'] = array(
+    'title' => 'Device Documents Upload',
+    'type' => MENU_CALLBACK,
+    'page callback' => 'pfe_pip_meetings_upload_callback',
+    'access callback'  => TRUE,
+  );
+
+  $items['node/%/archive'] = array(
+    'title' => 'Resource',
+    'type' => MENU_CALLBACK,
+    'page callback' => 'pfe_pip_meetings_archive_resource',
+    'access callback'  => TRUE,
+  );
+
+  $items['node/%/unarchive'] = array(
+    'title' => 'Resource',
+    'type' => MENU_CALLBACK,
+    'page callback' => 'pfe_pip_meetings_unarchive_resource',
+    'access callback'  => TRUE,
+  );
+
+  $items['archived-resources'] = array(
+    'title' => 'Archived Resource',
+    'type' => MENU_CALLBACK,
+    'page callback' => 'get_archived_resource',
+    'access callback'  => TRUE,
+  );
+
+  $items['device/%/gpid/%/export-offer-letter'] = array(
+    'page callback'    => 'download_offer_letter',
+    'page arguments'  => array(1, 3),
+    'access callback'  => TRUE,
+    'file' => 'includes/meetings.functions.inc',
+  );
+  return $items;
+}
+
+/**
+ * List all archived Resources.
+ */
+function get_archived_resource() {
+  $archived_block = views_embed_view('resource_view_block', 'block_2');
+  return $archived_block;
+}
+
+/**
+ * For the archiving Resources.
+ */
+function pfe_pip_meetings_archive_resource() {
+  $resource_node = node_load(arg(1)); 
+  $resource_node->field_resource_is_archive[LANGUAGE_NONE]['0']['value'] = 0;
+  node_save($resource_node); 
+  drupal_goto('node/5');
+}
+
+/** 
+ * For the unarchiving Resources.
+ */
+function pfe_pip_meetings_unarchive_resource() {
+  $resource_node = node_load(arg(1));
+  $resource_node->field_resource_is_archive[LANGUAGE_NONE]['0']['value'] = 1;
+  node_save($resource_node);
+  drupal_goto('archived-resources');
+}
+
+/** 
+ * For the Upload Document callback.
+ */
+function pfe_pip_meetings_upload_callback() {
+  return drupal_get_form('pfe_pip_meetings_upload_form');
+}
+
+/** 
+ * For the Upload Document form.
+ */
+function pfe_pip_meetings_upload_form($form, $form_state){
+  $form['#attributes']['enctype'] = 'multipart/form-data';
+  $form['markup'] = array(
+    '#markup' => '<div class ="upload_deviceid">Device Id: '. arg(1) . '</div>',
+  );
+  $form['docx_log_file'] = array(
+    '#markup' => '<div>'. pfe_get_document_log(arg(1), 'offer_letter') . '</div>',
+    '#prefix' => '<div class= "form_title">' . t('Letter of offer (LOO)') . '</div>',
+  );
+  $form['loo_file_upload'] = array(
+    '#type'        => 'file',
+    '#description' => check_plain(t('Allowed File type : pdf')),
+  );
+  $form['device_id'] = array(
+    '#type' => 'hidden',
+    '#title' => t('GP Name'),
+    '#default_value' => arg(1),
+    '#size' => 255,
+  );
+  $form['device_submit'] = array(
+    '#type'  => 'submit',
+    '#value' => t('Submit'),
+  );
+  return $form;
+}
+/** 
+ * For the Upload Document form Validation.
+ */
+
+function pfe_pip_meetings_upload_form_validate($form, &$form_state){
+  $extensions = 'pdf' ; 
+  $validators = array('file_validate_extensions' => array($extensions));
+  if($form_state['values']['type'] == 'lrf'){
+    $file = file_save_upload('lrf_file_upload', $validators);
+    if(empty($file)) {
+      form_set_error('lrf_file_upload', t('Please select the PDF file')) ;    
+    }
+    elseif($file !== NULL) {
+      $form_state['values']['lrf_file_upload']  = $file;
+    }
+  }else {
+  $file = file_save_upload('loo_file_upload', $validators);
+  if(empty($file)) {
+    form_set_error('loo_file_upload', t('Please select the PDF file')) ;    
+  }
+  elseif($file !== NULL) {
+    $form_state['values']['loo_file_upload']  = $file;
+  }
+  }
+}
+
+/**
+* Implements submit callback for device document upload.
+*/
+function pfe_pip_meetings_upload_form_submit($form, &$form_state){
+  if($form_state['values']['type'] == 'lrf'){
+    $file = $form_state['values']['lrf_file_upload'];
+    $file_content = file_get_contents($file->uri);
+    $filename = 'loan-application-' . $file->filename;
+    $file = file_save_data($file_content, 'public://upload_pdf//' . $filename, FILE_EXISTS_RENAME);
+    if ($file) {
+       $query = db_update('pfe_document_upload');
+       $query->fields(array('com_lrf_id' => $filename, 'lrf_upload_date' => format_date(time(), 'custom', 'Y-m-d')));
+       $query->condition('deviceid', $form_state['values']['device_id']);
+       $query->execute();
+       pfe_device_upload_log($filename, 'loan_application', $form_state['values']['device_id']);
+    if($query){
+      drupal_set_message(t('Loan Application Form Uploaded Successfully.'));
+      }
+    }
+  }else{
+    $file = $form_state['values']['loo_file_upload'];
+    $filename = 'Offer-letter-' . $file->filename;
+    $file_content = file_get_contents($file->uri);
+    $file = file_save_data($file_content, 'public://upload_pdf//' . $filename, FILE_EXISTS_RENAME);
+  if ($file) {
+      $query = db_update('pfe_document_upload');
+      $query->fields(array('com_loo_id' => $filename, 'loo_upload_date' => format_date(time(), 'custom', 'Y-m-d')));
+      $query->condition('deviceid', $form_state['values']['device_id']);
+      $query->execute();
+      pfe_device_upload_log($filename, 'offer_letter', $form_state['values']['device_id']);
+    }
+  if($query){
+      drupal_set_message(t('Letter Of Offer Uploaded Successfully.'));
+    }
+  }
+}
+/** 
+ * For the Device Upload Log.
+ */
+function pfe_device_upload_log($filename, $document_type, $device_id){
+    $query = db_insert('pfe_document_upload_log');
+    $query->fields(array('deviceid' =>  $device_id, 'document_type' => $document_type, 'completed_loo' => $filename, 'upload_date' =>format_date(time(), 'custom', 'Y-m-d')));
+    $query->execute();
+}
+
+/** 
+ * For the Upload Document log.
+ */
+function pfe_get_document_log($device_id, $type){
+  $result = db_select('pfe_document_upload_log', 'dl')
+  ->fields('dl', array('completed_loo', 'upload_date'))
+  ->condition('dl.deviceid', $device_id, '=')
+  ->condition('dl.document_type', $type, '=')
+  ->execute()
+  ->fetchAll();
+  $data = '';
+  $i = 1;
+  if($type == 'loan_application'){
+  $pdf_name = 'LRF_V';
+  }
+  if($type == 'offer_letter'){
+  $pdf_name = 'LOO_V';
+  }
+  foreach($result as $results) {
+    $data .= '<ul><li>' . l($pdf_name . $i.'.pdf', file_create_url('public://upload_pdf/' . $results->completed_loo), array('attributes' => array('class' => 'loo_pdf', 'target' => '_blank'))) . " " . ('(Date: ' . $results->upload_date) . ')</li></ul>';
+    $i++;
+  }
+  return $data;
+}
+
+/** 
+ * For the Upload lrf form.
+ */
+function pfe_pip_meetings_upload_lrf_form($form, $form_state){
+  $form['#attributes']['enctype'] = 'multipart/form-data';
+  $form['#validate'][] = 'pfe_pip_meetings_upload_form_validate';
+  $form['docx_log_file'] = array(
+    '#markup' => '<div>lRF</div>',
+  );
+  $form['docx_log_file'] = array(
+    '#markup' => '<div>'. pfe_get_document_log(arg(1), 'loan_application') . '</div>',
+    '#prefix' => '<div class= "form_title">' . t('Loan Request Form (LRF)') . '</div>',
+  );
+  $form['lrf_file_upload'] = array(
+    '#type'        => 'file',
+    '#description' => check_plain(t('Allowed File type : pdf')),    
+  );
+  $form['device_id'] = array(
+    '#type' => 'hidden',
+    '#default_value' => arg(1),
+    '#size' => 255,
+  );
+  $form['type'] = array(
+    '#type' => 'hidden',
+    '#default_value' => 'lrf',
+    '#size' => 255,
+  );
+  $form['lrf_device_submit'] = array(
+    '#type'  => 'submit',
+    '#value' => t('Submit'),
+    '#submit' => array('pfe_pip_meetings_upload_form_submit'),
+  );
+  return $form;
+}
+
+/** 
+ * For the Registration Message.
+ */
+function registered_message(){
+  return theme('reg_confirm', array('items' => array()));
+}
+
+/** 
+ * For the Permission.
+ */
+function pfe_pip_meetings_permission() {
+  return array(
+    'add representative' => array(
+      'title' => t('Add representatives'),
+      'description' => t('Access to add representatives'),
+     ),
+
+    'access view meetings' => array(
+      'title' => t('View Meetings'),
+      'description' => t('Access view meetings'),
+     ),  
+
+    'add device rep' => array(
+      'title' => t('Add Device'),
+      'description' => t('Add device for reps'),
+     ),  
+
+    'access download agenda' => array(
+      'title' => t('Download agenda'),
+      'description' => t('Access download agenda'),
+     ),
+
+    'download invitatons' => array(
+      'title' => t('Download invitations'),
+      'description' => t('Access download invitations'),
+     ),  
+
+    'download faxback' => array(
+      'title' => t('Download faxback'),
+      'description' => t('Access download faxback'),
+     ),  
+  );
+}
+
+/** 
+ * For the Access Callback.
+ */
+function pfe_pip_meetings_view_access_callback() {
+  global $user;
+
+  // User #1 has all privileges.
+  if ($user->uid == 1) {
+    return TRUE;
+  }
+  else if(isset($user->roles['6']) || isset($user->roles['8'])) {
+    return TRUE;
+  }
+}
+
+
+/**
+ * Implements hook_theme().
+ */
+function pfe_pip_meetings_theme($existing, $type, $theme, $path) {
+  $module_path = drupal_get_path('module', 'pfe_pip_meetings');
+  return array(
+  'reminder_mail' => array(
+    'variables' => array('data' => NULL),
+    'template' => 'reminder-mail',
+    'path' => $module_path . '/templates',
+  ),
+  'gps_registered_msg' => array(
+    'variables' => array('items' => NULL),
+    'template' => 'templates/gps-registered-msg',
+  ),
+  'reg_confirm' => array(
+    'variables' => array('items' => NULL),
+    'template' => 'templates/registration-confirmation',
+  ),
+  'offer_letter_rep_mail' => array(
+    'variables' => array('items' => NULL),
+    'template' => 'templates/offer-letter-rep-mail',
+   ),
+  'offer_letter_gp_mail' => array(
+    'variables' => array('items' => NULL),
+    'template' => 'templates/offer-letter-gp-mail',
+   ), 
+   'offer_letter_warehouse_mail' => array(
+    'variables' => array('items' => NULL),
+    'template' => 'templates/offer-letter-warehouse-mail',
+   ),  
+  'cancel_mail_rep' => array(
+    'variables' => array('data' => NULL),
+    'template' => 'cancel-mail-rep',
+    'path' => $module_path . '/templates',
+  ),
+   'cancel_mail_gp' => array(
+    'variables' => array('data' => NULL),
+    'template' => 'cancel-mail-gp',
+    'path' => $module_path . '/templates',
+  ),
+   'offer_letter_sp_rep_mail' => array(
+    'variables' => array('items' => NULL),
+    'template' => 'templates/offer-letter-sp-rep-mail',
+   ),
+  'offer_letter_sp_gp_mail' => array(
+    'variables' => array('items' => NULL),
+    'template' => 'templates/offer-letter-sp-gp-mail',
+   ), 
+   'offer_letter_sp_warehouse_mail' => array(
+    'variables' => array('items' => NULL),
+    'template' => 'templates/offer-letter-sp-warehouse-mail',
+   ),
+   'offer_letter_alivecor_warehouse_mail' => array(
+    'variables' => array('items' => NULL),
+    'template' => 'templates/offer-letter-alivecor-warehouse-mail',
+   ),
+   'offer_letter_alivecor_rep_mail' => array(
+    'variables' => array('items' => NULL),
+    'template' => 'templates/offer-letter-alivecor-rep-mail',
+   ),
+   'offer_letter_alivecor_gp_mail' => array(
+    'variables' => array('items' => NULL),
+    'template' => 'templates/offer-letter-alivecor-gp-mail',
+   ),
+  );
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function pfe_pip_meetings_block_info() {
+  $blocks = array();
+
+  $blocks['registered_gps'] = array(
+  'info' => 'Registered GPs',
+  'cache' => DRUPAL_NO_CACHE,
+  );
+
+  $blocks['meetings_operations'] = array(
+  'info' => 'Meetings Operations',
+  'cache' => DRUPAL_NO_CACHE,
+  );
+  $blocks['gps_registered_msg'] = array(
+  'info' => 'GPs Registered Message',
+  'cache' => DRUPAL_NO_CACHE,
+  );
+  $blocks['alivecor_links'] = array(
+  'info' => 'alivecor links',
+  'cache' => DRUPAL_NO_CACHE,
+  );
+  $blocks['lrf_upload'] = array(
+  'info' => 'LRF upload form',
+  'cache' => DRUPAL_NO_CACHE,
+  );
+  return $blocks;
+}
+
+/**
+* Implements hook_block_view().
+*/
+function pfe_pip_meetings_block_view($delta = '') {
+  $block = array();
+  switch ($delta) {
+  case 'registered_gps':
+    $block['subject'] = 'Registered GPs';
+    $block['content'] = drupal_get_form('registered_gps_operations');
+    break;
+  case 'meetings_operations':
+    $block['subject'] = 'Meetings Operations';
+    $block['title'] = '<none>';
+    $block['content'] = drupal_get_form('pfe_pip_meetings_operations');
+    break;
+  case 'gps_registered_msg':
+    $block['subject'] = 'GPs Registered Message';
+    $block['content'] = _gps_registered_msg();
+    break;
+   case 'alivecor_links':
+    $block['content'] = _get_alivecor_links();
+    break;
+   case 'lrf_upload':
+    $block['content'] = drupal_get_form('pfe_pip_meetings_upload_lrf_form');
+    break;
+  }
+  return $block;
+}
+
+/** 
+ * The callback function for meeting.
+ */
+function pfe_pip_meetings_check_complete($nid) {
+  $node = node_load($nid);
+  if($node->type=="meetings"){
+    $meeting_date = $node->field_meeting_date[LANGUAGE_NONE][0]['value'];
+    return time() > $meeting_date ? TRUE : FALSE;
+  }elseif($node->type=='screening_pack'){
+    return TRUE;
+  }elseif($node->type=='alivecor'){
+    return TRUE;
+  }
+}
+/** 
+ * The callback function to check meeting time.
+ */
+function pfe_pip_meetings_time($nid) {
+  $node = node_load($nid);
+  $meeting_date = $node->field_meeting_date[LANGUAGE_NONE][0]['value'];
+  $t = time();
+  $meeting_formatted_date = date( 'Y-m-d', $meeting_date); 
+  $today = date( 'Y-m-d', $t);
+  if($meeting_formatted_date < $today)
+    return TRUE;
+  else 
+    return FALSE;
+}
+/** 
+ * The callback function to check meeting day.
+ */
+function pfe_pip_meetings_day($nid) {
+  $node = node_load($nid);
+  $meeting_date = $node->field_meeting_date[LANGUAGE_NONE][0]['value'];
+}
+/** 
+ * The callback function to check meeting expiry date.
+ */
+function expiry_check($node_obj){
+  $time_meet = $node_obj->field_meeting_time[LANGUAGE_NONE][0]['value'];
+  $current_time = date("h:ia");
+  $meeting_date = $node_obj->field_meeting_date[LANGUAGE_NONE][0]['value'];
+  $t = time();
+  $meeting_formatted_date = date( 'Y-m-d', $meeting_date); 
+  $today = date( 'Y-m-d', $t);
+  if (strtotime(date('h:ia') )> strtotime(date('h:ia', strtotime($time_meet))) && (strtotime($today) == strtotime($meeting_formatted_date))) {
+    return true;
+  }
+  else{
+    return false;
+  }
+}
+/** 
+ * The callback function to check meeting Operation.
+ */
+function pfe_pip_meetings_operations($form, &$form_state) {
+  $form = array();
+  $nid = arg(1);
+  global $user;
+  $form['nid'] = array(
+    '#type' => 'hidden',
+    '#value' => $nid,
+  );
+  $expiry_flag = false;
+  if (arg(0) == 'node' && is_numeric(arg(1))) {
+    // Get the nid.
+    $nid = arg(1);
+    // Load the node if you need to.
+    $node = node_load($nid);
+    //meetings.
+    if($node->type=='meetings'){
+      if (node_access("update", $node) === TRUE) {
+      $form['edit_meeting'] = array(
+        '#markup' => l('Edit Meeting', 'node/' . $nid . '/edit'),
+      );
+      }
+    }
+  }
+  if($node->type=='meetings'){
+    if(pfe_pip_meetings_time($nid)) {
+      if(isset($_SESSION['guest_email'])) {   
+        $reg_check =  pfe_pip_login_registration_check($nid, $_SESSION['guest_email']);
+      }
+      if(isset($reg_check) && $reg_check && (in_array('General Practitioner', array_values($user->roles)) || in_array('guest', array_values($user->roles)))) { 
+        $form['register_meeting'] = array(
+          '#markup' => l('REGISTER FOR MEETING', 'already-registered', array('attributes' => array('target' => '_blank'))),
+        ); 
+      }
+      else { 
+        $form['register_meeting'] = array(
+          '#markup' => l('REGISTER FOR MEETING', 'node/' . $nid . '/register', array('attributes' => array('target' => '_blank'))),
+        );  
+      return $form; 
+    }
+  }
+  else {
+    if (arg(0) == 'node' && is_numeric(arg(1))) {
+    // Get the nid.
+    $nid = arg(1);
+    // Load the node if you need to.
+    $node = node_load($nid);
+    $expiry_flag = expiry_check($node);
+  }
+  if(!$expiry_flag){
+    $form['cancel_meeting'] = array(
+      '#markup' => flag_create_link('cancel_meeting', $nid),
+    ); 
+  }
+  if (user_access('ui send_reminder')): 
+    $flag = flag_get_flag('cancel_meeting');
+      if($flag && $flag->is_flagged($nid)) {
+        $send_reminder_disabled = TRUE;
+        //'display uncancel meeting'.
+        $status_complete = $node->field_meeting_status[LANGUAGE_NONE][0]['value'];
+      if($status_complete !== 'complete'){
+        $node->field_meeting_status[LANGUAGE_NONE][0]['value'] = 'cancel';
+        node_save($node);
+      }
+    }
+    else {
+    $send_reminder_disabled = FALSE;
+    $status_complete = $node->field_meeting_status[LANGUAGE_NONE][0]['value'];
+    if($status_complete !== 'complete'){
+      $node->field_meeting_status[LANGUAGE_NONE][0]['value'] = 'upcoming';
+      node_save($node);
+     }
+    }
+    $form['send_reminder'] = array(
+      '#type' => 'submit',
+      '#value' => 'Send Reminder',
+      '#disabled' => $send_reminder_disabled ? TRUE : FALSE,
+    );
+  endif;
+  if(isset($_SESSION['guest_email'])) {
+    $reg_check =  pfe_pip_login_registration_check($nid, $_SESSION['guest_email']);
+  }
+  if(isset($reg_check) && $reg_check && (in_array('General Practitioner', array_values($user->roles)) || in_array('guest', array_values($user->roles)))) {
+    $form['register_meeting'] = array(
+        '#markup' => l('REGISTER FOR MEETING', 'already-registered', array('attributes' => array('target' => '_blank'))),
+      ); 
+  }
+  else {
+  $form['register_meeting'] = array(
+    '#markup' => l('REGISTER FOR MEETING', 'node/' . $nid . '/register', array('attributes' => array('target' => '_blank'))),
+    ); 
+  }
+    if(!in_array('General Practitioner', array_values($user->roles)) && !in_array('guest', array_values($user->roles))){
+      //check for Faxback options.
+        if(strtolower($node->field_faxback_non_faxback[LANGUAGE_NONE][0]['value']) == 'f'){ 
+        $form['download_invitation'] = array(
+          '#markup' => l('Download Invitation', 'node/' . $nid . '/download-invitations', array('attributes' => array('target' => '_blank'))),
+        );
+        $form['download_faxback'] = array(
+          '#markup' => l('Download Faxback Form', 'node/' . $nid . '/download-faxback', array('attributes' => array('target' => '_blank'))),
+        );  
+        }else{
+        $form['download_invitation'] = array(
+          '#markup' => l('Download Invitation', 'node/' . $nid . '/download-invitations', array('attributes' => array('target' => '_blank'))),
+        );
+      }
+      if(in_array('Pfizer or BMS Representative', array_values($user->roles))){
+          $form['back_meeting_link'] = array(
+            '#markup' => l('Back To Meetings', 'view-rep-meetings'),
+          );
+        }else{
+          $form['back_meeting_link'] = array(
+            '#markup' => l('Back To Meetings', 'view-meetings'),
+          );
+        }
+      }
+    return $form;
+    }
+  }elseif($node->type=='screening_pack'){
+    $form['register_meeting'] = array(
+      '#markup' => l('Register for Screening Pack', 'node/' . $nid . '/register', array('attributes' => array('target' => '_blank'))),
+    );
+    if(in_array('administrator', $GLOBALS['user']->roles) || in_array('BMS Head Office / Pfizer Admin', $GLOBALS['user']->roles)){
+      $form['report'] = array(
+    '#markup' => l('Screening Pack report', 'reports', array('attributes' => array('target' => '_blank'))),
+      );
+    }
+  return $form;
+
+  }
+}
+
+/**
+* Function to get sidebar links on alivecor page.
+*/
+function _get_alivecor_links(){
+  if (arg(0) == 'node' && is_numeric(arg(1)) ){
+    $nid = arg(1);
+    $node = node_load($nid);
+    if($node->type=='alivecor'){
+      $form['register_meeting'] = array(
+        '#markup' => '<p>' . l('Register for Alivecor', 'node/' . $nid . '/register', array('attributes' => array('target' => '_blank'))) . '</p>',
+      );
+    if(in_array('administrator', $GLOBALS['user']->roles) || in_array('BMS Head Office / Pfizer Admin', $GLOBALS['user']->roles)){
+      $form['report'] = array(
+       '#markup' => '<p>' . l('Alivecor Report', 'reports', array('attributes' => array('target' => '_blank'))) . '</p>',
+      );    }
+      return $form;
+    }
+  }
+}
+
+/**
+* Implements hook_form_node_form_alter().
+*/
+function pfe_pip_meetings_form_node_form_alter(&$form, &$form_state) {
+  module_load_include('inc', 'pfe_pip_meetings', 'includes/add.device');
+  $node = $form_state['node'];
+  if($node->type =='meetings'){
+     $form['#validate'][] = 'create_meeting_validate';
+    if (!isset($node->nid) || isset($node->is_new)) {
+    }
+    else {
+        /*Add Edit Meeting link for the completed meeting*/  
+        $expiry_flag = expiry_check($node);
+        $meeting_flag=pfe_pip_meetings_time($node->nid);      
+        if($meeting_flag || $expiry_flag){         
+          $form['field_meeting_activity']['#disabled'] = TRUE;
+          $form['title']['#disabled'] = TRUE;
+          $form['field_venue_name']['#disabled'] = TRUE;
+          $form['field_meeting_time']['#disabled'] = TRUE;
+          $form['field_meeting_rsvp_date']['#disabled'] = TRUE;
+          $form['field_venue_address']['#disabled'] = TRUE;
+          $form['field_venue_city']['#disabled'] = TRUE;
+          $form['field_venue_postcode']['#disabled'] = TRUE;
+          $form['field_meeting_type']['#disabled'] = TRUE;
+          $form['field_meeting_date']['#disabled'] = TRUE;
+          $form['field_state']['#disabled'] = TRUE;
+          $form['field_facilitator_details']['#disabled'] = TRUE;
+          $form['field_speaker_details']['#disabled'] = TRUE;
+        }
+        // This is not a new node.
+        $status_value = $node->field_meeting_status[LANGUAGE_NONE][0]['value'];
+        if($status_value !== 'cancel' && $status_value !== 'complete'){
+          $node->field_meeting_status[LANGUAGE_NONE][0]['value']= 'edit';
+          node_save($node);
+        }
+      }
+  }
+  if($node->type =='add_device'){
+    if (isset($node->nid) || empty($node->is_new)) {
+        /*Add Edit Meeting link for the completed meeting*/
+        $rep_values = rep_value();    
+        $form['body']['#access'] = 0;
+        $form['title']['#access'] = 0;     
+        $form['field_delivered_status']['#access'] = 0;
+        $form['field_return_status']['#access'] = 0;
+        $form['field_unique_value']['#access'] = 0;
+        $form['field_rep_responsible_id']['#access'] = 0;
+        $form['field_gp_id']['#access'] = 0;
+        $form['field_meeting_id']['#access'] = 0;
+        $form['field_node_id'][LANGUAGE_NONE]['0']['value']['#type'] = "hidden";
+        $form['field_device_status']['#access'] = 0;
+        $form['field_rep_responsible_name_custo']['#access'] = 0;
+        $form['#validate'][] = 'add_device_rep_validate';
+        $form['#submit'][] = 'add_device_rep_submit';
+
+        $form['field_device_id']['#disabled'] = TRUE;
+        $form['field_rep_responsible_name_custo']['#disabled'] = TRUE;
+        $form['field_rep_responsible_name']['#disabled'] =TRUE;  
+        global $user;
+        if(!in_array('administrator', array_values($user->roles))){
+        $form['field_loan_type']['#disabled'] = TRUE;
+        }    
+     }
+  }
+}
+/**
+* Implements Send reminder functionality.
+*/
+function pfe_pip_meetings_operations_submit($form, &$form_state) {
+  $operation = $form_state['values']['op'];
+  if ($operation == 'Send Reminder') {
+    pfe_pip_meetings_send_reminder($form_state['values']);
+  }
+}
+/**
+* Implements Send reminder functionality.
+*/
+function pfe_pip_meetings_send_reminder($values) {
+  $nid = $values['nid']; 
+  if(is_numeric($nid)) {
+      $entity = node_load($nid);
+      $entity_type = 'node';     
+      list($entity_id) = entity_extract_ids($entity_type, $entity);
+      $label = entity_label($entity_type, $entity);
+      $query = new EntityFieldQuery();
+      $result = $query
+        ->entityCondition('entity_type', 'registration')
+        ->propertyCondition('entity_id', $entity_id)
+        ->propertyCondition('entity_type', $entity_type)
+        ->pager(20)
+        ->tableSort($header)
+        ->execute();
+
+    if (!empty($result['registration'])) {
+       $registrations = registration_load_multiple(array_keys($result['registration']));    
+      if(isset($entity->field_meeting_lead_rep[LANGUAGE_NONE]['0']['uid'])){
+        $lead_rep=user_load($entity->field_meeting_lead_rep[LANGUAGE_NONE]['0']['uid']);
+        $data['lead_first_name']=$lead_rep->field_user_name[LANGUAGE_NONE]['0']['value'];
+        $data['lead_last_name']=$lead_rep->field_user_surname[LANGUAGE_NONE]['0']['value'];
+        $data['lead_phone_number']=$lead_rep->field_phone[LANGUAGE_NONE]['0']['value'];
+      }
+      if(isset($entity->field_supporting_rep[LANGUAGE_NONE]['0']['uid'])){
+        $support_rep=user_load($entity->field_supporting_rep[LANGUAGE_NONE]['0']['uid']);
+        $data['support_first_name']=$support_rep->field_user_name[LANGUAGE_NONE]['0']['value'];
+        $data['support_last_name']=$support_rep->field_user_surname[LANGUAGE_NONE]['0']['value'];
+        $data['support_phone_number']=$support_rep->field_phone[LANGUAGE_NONE]['0']['value'];
+      }
+      foreach ($registrations as $registration) {
+        $wrapper = entity_metadata_wrapper('registration', $registration);   
+        $data['email'] = $wrapper->field_registrant_email->value();
+        $data['gp_name'] = $wrapper->field_registrant_name->value();
+        $data['gp_surname'] = $wrapper->field_registrant_surname->value();
+        $data['meeting_id'] = $entity->title;
+        $data['meeting_date'] = date('d F Y',$entity->field_meeting_date[LANGUAGE_NONE]['0']['value']); 
+        $data['meeting_time'] = $entity->field_meeting_time[LANGUAGE_NONE]['0']['value']; 
+        $data['venue_name'] = $entity->field_venue_name[LANGUAGE_NONE]['0']['value']; 
+        $data['venue_address'] = $entity->field_venue_address[LANGUAGE_NONE]['0']['value']; 
+        $data['venue_city'] = $entity->field_venue_city[LANGUAGE_NONE]['0']['value']; 
+        $data['meeting_activity'] = $entity->field_meeting_activity [LANGUAGE_NONE]['0']['value']; 
+        $params['subject'] = 'Thrombo 360 – Meeting Reminder';  
+        $params['body'] = theme('reminder_mail', array('items' => $data));
+        $message = drupal_mail('pfe_pip_meetings', 'meetings_reminders', $data['email'], $language, $params, NULL, TRUE);  
+      }
+      if ($message['send']) {
+        drupal_get_messages();
+        drupal_set_message(t('Success! The reminder e-mails has been sent.'));
+      }    
+    }
+  }
+} 
+
+/**
+* Implementation of hook_cron().
+*/
+function pfe_pip_meetings_cron() {
+  watchdog('cron', 'Hello Cron!');
+  $post_meeting = [];
+  $post_meeting = pfe_pip_view_post_meetings();
+  foreach ($post_meeting as $values){
+    if(pfe_pip_meetings_check_complete($values)) {
+      $node = node_load($values);
+      $node->field_meeting_status[LANGUAGE_NONE][0]['value'] = 'complete';
+      node_save($node); 
+    }
+  }
+}
+
+/**
+* Implements hook_mail().
+*/
+function pfe_pip_meetings_mail($key, &$message, $params) {
+  if ($key == 'meetings_reminders') {
+    $message['subject'] = $params['subject'];
+    $message['body'] = $params['body'];
+  }
+  else if ($key == 'information'){
+    $message['subject'] = $params['subject'];
+    $message['body'][] = $params['body'];
+  }
+  else if ($key == 'add_device'){
+    $message['subject'] = $params['subject'];
+    $message['body'][] = $params['body'];
+    $message['params']['attachments'][] = $params['attachments'];
+    $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed';
+  }
+  else if ($key == 'cancel_mail'){
+    $message['subject'] = $params['subject'];
+    $message['body'][] = $params['body'];
+  }
+  if(isset($_ENV['AH_SITE_ENVIRONMENT']) && $_ENV['AH_SITE_ENVIRONMENT'] && strtolower($_ENV['AH_SITE_ENVIRONMENT']) != 'prod') {
+    $message['subject'] = $_ENV['AH_SITE_ENVIRONMENT'].' - '.$params['subject'];
+  }
+}
+
+
+function registered_gps_operations($form, &$form_state) {
+  $rows = array();
+  $attended = array();
+  $nid = arg(1);
+  if(is_numeric($nid)) {
+    $entity = node_load($nid);
+    $entity_type = 'node';
+    if($entity->type=="meetings"){
+      $header = array('Name', 'Surname', 'Date created', 'Email', 'Phone', 'Fax','Device Id','Dietary requirements', 'Attended');
+    }elseif($entity->type=="screening_pack"){
+      $header = array('Name', 'Surname','Rep Responsible', 'Date created', 'Email', 'Phone', 'Fax','Device Id');
+    }
+    if($entity->type=="alivecor"){
+      $header = array('Name', 'Surname','Rep Responsible','Date created', 'Email', 'Phone', 'Fax','Device Id');
+    }
+    if ( entity_access('view', 'registration', $registration) || entity_access('update', 'registration', $registration) || entity_access('delete', 'registration', $registration) ) {
+    array_push($header, "Actions");
+    }
+    $entity = node_load($nid);
+    $entity_type = 'node';
+    list($entity_id) = entity_extract_ids($entity_type, $entity);
+    $label = entity_label($entity_type, $entity);
+    if($form_state['input']['op'] == 'Search'){
+      $search_val = $form_state['input']['search'];
+      $query = new EntityFieldQuery();
+      $query->entityCondition('entity_type', 'registration')
+      ->propertyCondition('entity_id', $entity_id)
+      ->propertyCondition('entity_type', $entity_type)
+      ->fieldCondition('field_author_name', 'value', "%".$search_val."%", 'LIKE');
+      $result = $query->tableSort($header) ->execute();
+    }
+    else {
+      $lead_rep_uid=$entity->field_meeting_lead_rep[LANGUAGE_NONE]['0']['uid'];
+      $supportive_rep_uid=$entity->field_supporting_rep[LANGUAGE_NONE]['0']['uid'];   
+      $query = new EntityFieldQuery();
+      $query->entityCondition('entity_type', 'registration')
+      ->propertyCondition('entity_id', $entity_id)
+      ->propertyCondition('entity_type', $entity_type);
+     
+       if(in_array('Pfizer or BMS Representative', $GLOBALS['user']->roles) && ($GLOBALS['user']->uid!=$lead_rep_uid && $GLOBALS['user']->uid!=$supportive_rep_uid)){
+        $query->propertyCondition('author_uid', $GLOBALS['user']->uid);
+      }
+      $result = $query->tableSort($header)->execute();
+    }             
+    if (!empty($result['registration'])){
+      $registrations = registration_load_multiple(array_keys($result['registration']));       
+      foreach ($registrations as $registration){ 
+        $wrapper = entity_metadata_wrapper('registration', $registration);
+        $author = $wrapper->author->value();
+        $user = $wrapper->user->value();
+        $state = $wrapper->state->value();        
+        $author_col = '';
+        if ($registration->author_uid) {
+          $author_col = theme('username', array('account' => $author));
+        }
+        $user_col = '';
+        if ($registration->user_uid) {
+          $user_col = theme('username', array('account' => $user));
+        }
+        $device_id='';
+        $device_assigned_id=db_select('assigned_device', 'ad')
+          ->fields('ad', array('deviceid'))
+          //->condition('ad.nodeid',$entity_id)
+          //->condition('ad.gpid', $registration->registration_id)
+		  ->condition('ad.gp_email_id', $registration->anon_mail)
+          ->condition('ad.returnstatus',0)
+          ->execute()->fetchField();
+          if($device_assigned_id!=''){
+            $device_id=$device_assigned_id;
+            $hide_class="hide_add_button";
+          }else{
+            $device_id='';
+            $hide_class="";
+          }
+      $actions = array();
+      if (entity_access('view', 'registration', $registration)) {
+        $actions[] = l(t('View'), 'registration/' . $registration->registration_id);
+      }
+      if (entity_access('update', 'registration', $registration)) {
+        $actions[] = l(t('Edit'), 'registration/' . $registration->registration_id . '/edit', array('query' => drupal_get_destination()));
+      }
+      if (entity_access('delete', 'registration', $registration)) {
+        $actions[] = l(t('Delete'), 'registration/' . $registration->registration_id . '/delete', array('query' => drupal_get_destination()));
+      }
+      if(pfe_pip_meetings_check_complete($nid) && in_array('Pfizer or BMS Representative', $GLOBALS['user']->roles)){
+        $actions[] = l(t('Apply'), 'registration/' . $registration->registration_id . '/node/' . $nid .'/export-registered-gp-pdf', array('attributes' => array('class' => 'apply')));
+      }
+      if($device_assigned_id!=''){
+        $device_id=$device_assigned_id;
+        $add_action="<span class='apply add-device hide_add_button'>Add</span>";
+        }else{
+          $device_id='';
+          $add_action=l(t('Add'), 'add-device/' . $registration->registration_id . '/node/' . $nid, array('attributes' => array('class' => 'apply add-device')));
+      }
+      if(pfe_pip_meetings_check_complete($nid) && (in_array('administrator', $GLOBALS['user']->roles) || in_array('BMS Head Office / Pfizer Admin', $GLOBALS['user']->roles))){ 
+        $actions[] = $add_action;
+      }    
+      if($form_state['input']['op'] == 'Search'){
+        $rep_responsible = $registration->field_author_name[LANGUAGE_NONE][0]['value'];
+      }
+      else {
+        $rep_responsible = $author->field_user_name[LANGUAGE_NONE]['0']['value'] . " " . $author->field_user_surname[LANGUAGE_NONE]['0']['value'];
+      }
+    
+      if($entity->type=="meetings"){
+        $rows[$registration->registration_id] = array(
+        $wrapper->field_registrant_name->value(),
+        $wrapper->field_registrant_surname->value(),
+        date('d F Y', $wrapper->created->value()),
+        //$wrapper->field_registrant_address->value(),
+        $wrapper->field_registrant_email->value(),
+        $wrapper->field_registrant_phone->value(),
+        $wrapper->field_registrant_fax->value(),
+        $device_id,
+        $wrapper->field_registrant_dietary_req->value(),
+        '',
+        implode(' | ', $actions),
+      );
+      }elseif($entity->type=="screening_pack"){
+         $rows[$registration->registration_id] = array(
+          $wrapper->field_registrant_name->value(),
+          $wrapper->field_registrant_surname->value(),
+          $rep_responsible,
+          date('d F Y', $wrapper->created->value()),
+          $wrapper->field_registrant_email->value(),
+          $wrapper->field_registrant_phone->value(),
+          $wrapper->field_registrant_fax->value(),
+          $device_id,
+          implode(' | ', $actions),
+        );
+    }  
+      if($entity->type == "alivecor"){
+        $rows[$registration->registration_id] = array(
+          $wrapper->field_registrant_name->value(),
+          $wrapper->field_registrant_surname->value(),
+          $rep_responsible,
+          date('d F Y', $wrapper->created->value()),
+          $wrapper->field_registrant_email->value(),
+          $wrapper->field_registrant_phone->value(),
+          $wrapper->field_registrant_fax->value(),
+          $device_id,
+          implode(' | ', $actions),
+        );
+      }
+      if($wrapper->field_registrant_attended->value()) {
+        $attended[$registration->registration_id] = $wrapper->field_registrant_attended->value(); 
+      }
+    }
+    $settings = registration_entity_settings($entity_type, $entity_id);
+  }
+    $form_state['data'] = $rows;
+    $form_state['attendance_data'] = $attended;
+
+    if($entity->type=="meetings"){
+      $block_info= t('The following general practitioners have registered for this meeting:');
+       $form['gp_block_info'] = array(
+        '#markup' => render(drupal_get_form('pfe_pip_meetings_search', 'meetings')),
+      );
+    }elseif($entity->type=="screening_pack"){
+      $block_info= t('The following general practitioners have registered for a screening management pack:');
+      $form['gp_block_info'] = array(
+        '#markup' => render(drupal_get_form('pfe_pip_meetings_search', 'screening_pack')),
+      );
+    }
+    if($entity->type=="alivecor"){
+      $block_info= t('The following general practitioners have registered for an Alivecor device:');
+      $form['gp_block_info'] = array(
+        '#markup' => render(drupal_get_form('pfe_pip_meetings_search', 'alivecor')),
+      );
+    }
+    $form['registered_gps'] = array(
+      '#type' => 'tableselect',
+      '#header' => $header,
+      '#prefix' => '<strong>' . $block_info. '</strong>',
+      '#options' => $rows,
+      '#empty' => t('There are no registrants for %name', array('%name' => $label)),
+      '#default_value' => $attended,
+      '#js_select' => FALSE,
+    );
+
+    $save_attendance_disable = FALSE;
+    if(!pfe_pip_meetings_check_complete($nid)) {
+      $save_attendance_disable = TRUE;
+    }
+    elseif(empty($rows)) {
+      $save_attendance_disable = TRUE;
+    }
+    if (user_access('ui export attendance list')&&$entity->type=="meetings"):
+    $form['ui export attendance list'] = array(
+      '#markup' => l('Export Attendance List', 'node/' . $nid . '/export-attendance-xls', array('attributes' => array('target' => '_blank', 'class' => array('export-list')))),
+    );
+    $form['download_attendance_pdf'] = array(
+      '#markup' => l('Generate attendance PDF', 'node/' . $nid . '/export-attendance-pdf', array('attributes' => array('target' => '_blank', 'class' => array('export-list')))),
+    );
+    endif;
+
+    if (user_access('ui save attendance status')&&$entity->type=="meetings"): 
+    $form['save_attendance_status'] = array(
+      '#type' => 'submit',
+      '#value' => 'Save attendance status',
+      '#submit' => array('pfe_pip_meetings_save_attendance_status'),
+      '#disabled' => $save_attendance_disable,
+    );
+     endif;
+    $save_certificate_disable = FALSE;
+    if(empty($attended)) {      
+      $save_certificate_disable = 'form-cert-button-disabled';
+    }
+    elseif(!empty($attended)) {
+      $save_certificate_disable = 'export-list';
+    }
+    if (user_access('ui export certificate form')&&$entity->type=="meetings"):       
+      $form['ui_export_certificate_form'] = array(
+        '#markup' => l('Certificate Form', 'node/' . $nid . '/export-certificate-form-pdf', array('attributes' => array('target' => '_blank', 'class' => array($save_certificate_disable)))),   
+        '#prefix' => '<span class='.$save_certificate_disable.'>',
+        '#suffix' => '</span>',    
+      );  
+     endif;
+     return $form;
+  }
+}
+
+function pfe_pip_meetings_search($form, &$form_state, $type){
+  $form['search'] = array(
+      '#type' => 'textfield',
+      '#default_value' => isset($_POST['search'])? $_POST['search']: '',
+      '#attributes' => array('class' => array('search_rep'), 'placeholder' => t('Search By Rep Responsible')),
+  );
+  $form['submit'] = array(
+      '#type' => 'submit',
+      '#value' => t('Search'),
+      '#submit' => array('registered_gps_operations'),
+  );
+  if($type == 'alivecor'){
+      $form['reset'] = array(
+        '#markup' => '<a class= "form-submit" href ="/alivecoronly">Reset</a>',
+      );
+  }
+  if($type == "screening_pack"){
+      $form['reset'] = array(
+        '#markup' => '<a class= "form-submit" href ="https://' . $_SERVER['HTTP_HOST'] . request_uri() . '">Reset</a>',
+      );
+  }
+  if($type == "meetings"){
+      $form['reset'] = array(
+        '#markup' => '<a class= "form-submit" href ="https://' . $_SERVER['HTTP_HOST'] . request_uri() . '">Reset</a>',
+      );
+  }
+  return $form;
+}
+
+function pfe_pip_meetings_search_validate(&$form, &$form_state){
+}
+
+function pfe_pip_meetings_export_attendance_list($form, &$form_state) {
+  $rows = $form_state['data'];
+  $attendance_data = $form_state['attendance_data'];
+
+  $file_headers = array('Name', 'Surname', 'Date created', 'Street Address', 'Email', 'Phone', 'Fax', 'Dietary requirements', 'Attended');
+
+  $filename = "website_data_" . date('Ymd') . ".xls";
+  ob_clean();
+  drupal_add_http_header("Content-Disposition: attachment; filename=\"$filename\"");
+  drupal_add_http_header("Content-Type: application/vnd.ms-excel");
+
+  $output = '';
+  $keys = array();
+
+  exit;
+}
+
+function cleanData(&$str)
+{
+  $str = preg_replace("/\t/", "\\t", $str);
+  $str = preg_replace("/\r?\n/", "\\n", $str);
+  if(strstr($str, '"')) $str = '"' . str_replace('"', '""', $str) . '"';
+}
+
+function pfe_pip_meetings_save_attendance_status($form, &$form_state) {
+  $values = $form_state['values']['registered_gps'];
+
+  foreach ($values as $registration_id => $attended) {
+     pfe_pip_meetings_update_attendance($registration_id, $attended);
+  }
+}
+
+function pfe_pip_meetings_field_extra_fields() {
+  $extra['node']['meeting_registration'] = array(
+    'form' => array(
+      'phone_wrapper' => array(
+        'label' => t('Poll choices'),
+        'description' => t('Poll choices'),
+        'weight' => 13,
+      ),
+      'fax_wrapper' => array(
+        'label' => t('Poll settings'),
+        'description' => t('Poll module settings'),
+        'weight' => -3,
+      ),
+    ),
+  );
+return $extra;
+}
+
+/*For the autocompute GP Firstname*/
+function pfe_pip_meeting_firstname_autocomplete($string) {
+  $matches = array(); 
+  // Some fantasy DB table which holds cities
+  $query = db_select('field_data_field_registrant_name', 'c');
+  // Select rows that match the string
+  $return = $query
+  ->fields('c', array('field_registrant_name_value'))
+  ->condition('c.field_registrant_name_value', '%' . db_like($string) . '%', 'LIKE')
+  ->range(0, 10)
+  ->execute();
+  // add matches to $matches
+  foreach ($return as $row) {
+    $matches[$row->field_registrant_name_value] = check_plain($row->field_registrant_name_value);
+  }
+  $matches=array_unique($matches);
+  // return for JS
+  drupal_json_output($matches);
+}
+/*For the autocompute GP Surname*/
+function pfe_pip_meeting_sirname_autocomplete($string) {
+  $matches = array(); 
+  // Some fantasy DB table which holds cities
+  $query = db_select('field_data_field_registrant_surname', 'c');
+  // Select rows that match the string
+  $return = $query
+  ->fields('c', array('field_registrant_surname_value'))
+  ->condition('c.field_registrant_surname_value', '%' . db_like($string) . '%', 'LIKE')
+  ->range(0, 10)
+  ->execute();
+  // add matches to $matches  
+  foreach ($return as $row) {
+  $matches[$row->field_registrant_surname_value] = check_plain($row->field_registrant_surname_value);
+  }
+  $matches=array_unique($matches);
+  // return for JS
+  drupal_json_output($matches);
+}
+
+/**
+* Implements hook_form_alter().
+*/
+function pfe_pip_meetings_form_alter(&$form, &$form_state, $form_id) {
+
+  /* Add Validation for Registration Field*/
+  $nid = arg(1);
+  $node = node_load($nid);
+
+
+  if($node->type=='alivecor' || $node->type=='screening_pack' ){
+   $form['anon_mail']['#element_validate'][]='pfe_pip_meetings_representative_registration_validate_email';
+  }
+  /*Create Meeting form*/
+  if($form_id=="meetings_node_form") {
+  $i=0;
+  foreach($form['field_speaker_details'][LANGUAGE_NONE] as $value){
+  if(isset($form['field_speaker_details'][LANGUAGE_NONE][$i])){  
+  $form['field_speaker_details'][LANGUAGE_NONE][$i]['remove_button']['#attributes']['class'][]="data-remove-button";      }
+  $i++;    }
+  $i=0;
+  foreach($form['field_facilitator_details'][LANGUAGE_NONE] as $value){
+  if(isset($form['field_facilitator_details'][LANGUAGE_NONE][$i])){  
+  $form['field_facilitator_details'][LANGUAGE_NONE][$i]['remove_button']['#attributes']['class'][]="data-remove-button";      }
+  $i++;    }
+  $i=0;
+  foreach($form['field_session_details'][LANGUAGE_NONE] as $value){
+  if(isset($form['field_session_details'][LANGUAGE_NONE][$i])){  
+  $form['field_session_details'][LANGUAGE_NONE][$i]['remove_button']['#attributes']['class'][]="data-remove-button";      }
+  $i++;    }
+  $form['field_spec_spec_meeting'][LANGUAGE_NONE]['#title']=null;
+  $form['field_speaker_details'][LANGUAGE_NONE]['add_more']['#value']="Add Another Speaker";
+  $form['field_facilitator_details'][LANGUAGE_NONE]['add_more']['#value']="Add another Facilitator/moderator";
+  $form['field_session_details'][LANGUAGE_NONE]['add_more']['#value']="Add additional Session Details";
+  $form['field_meeting_activity']['#access'] = 0;
+  }
+
+  global $user;
+
+  $form['field_pdf_download']['und']['0']['value']['#type'] = "hidden";
+  if($form['#entity']->type=="screening_pack_registration" || $form['#entity']->type=="alivecor_registration"){
+   $form['field_registrant_name'][LANGUAGE_NONE]['0']['value']['#autocomplete_path'] = 'gp_name/autocomplete';
+   $form['field_registrant_surname'][LANGUAGE_NONE]['0']['value']['#autocomplete_path'] = 'gp_sirname/autocomplete';
+
+  if(arg(2) !='edit') {
+   if (in_array('guest', $GLOBALS['user']->roles)) {
+     $u_email = $_SESSION['guest_email'];
+   }else{
+     $u_email = $user->mail;
+   }
+   if($form['#entity']->type=='meeting_registration'){
+   $form['anon_mail']['#default_value'] =$u_email;
+  }
+
+   $form['field_registrant_email'][LANGUAGE_NONE][0]['value']['#default_value'] =$u_email;
+   
+  }
+
+  $form['#submit'][] = 'pdf_submit_callback';
+  return $form;
+  }
+  if($form_id == 'meetings_node_form') {
+
+  $form['field_meeting_state']['#attributes']['class'] = array('grid-4', 'omega');
+  $form['field_meeting_lead_rep']['#attributes']['class'] = array('grid-4', 'alpha');
+
+  $form['field_meeting_module']['#attributes']['class'] = array('grid-4', 'alpha');
+  $form['field_meeting_title']['#attributes']['class'] = array('grid-4', 'omega');
+  $form['field_meeting_other']['#attributes']['class'] = array('grid-4', 'alpha', 'fl');
+
+  $form['field_meeting_date']['#attributes']['class'] = array('grid-4', 'alpha');
+  $form['field_meeting_time']['#attributes']['class'] = array('grid-4', 'omega');  
+  $form['field_meeting_rsvp_date']['#attributes']['class'] = array('grid-4', 'alpha');
+
+
+  $form['field_venue_name']['#attributes']['class'] = array('grid-4', 'omega');
+  $form['field_venue_address']['#attributes']['class'] = array('grid-4', 'alpha');
+  $form['field_venue_city']['#attributes']['class'] = array('grid-4', 'omega');
+  $form['field_venue_postcode']['#attributes']['class'] = array('grid-4', 'alpha');
+  $form['field_venue_capacity']['#attributes']['class'] = array('grid-4', 'omega');
+
+  $form['field_facilitator_full_name']['#attributes']['class'] = array('grid-4', 'alpha');
+  $form['field_facilitator_title']['#attributes']['class'] = array('grid-4', 'alpha');
+  $form['field_facilitator_email']['#attributes']['class'] = array('grid-4', 'alpha');
+
+  }
+}
+
+function pdf_submit_callback(&$form, &$form_state){
+        global $base_url;
+        $reg_id=$form_state['registration']->registration_id;
+        $reg_entity_id=$form_state['registration']->entity_id;
+
+        $reg_load= entity_load_single('registration',$reg_id);
+        $download_pdf_link=$base_url.'/registration/' . $reg_id . '/node/' . $reg_entity_id .'/export-registered-gp-pdf';       
+        if(isset($download_pdf_link)){
+          user_cookie_save(array('pdf_url'=>$download_pdf_link));
+        } 
+        entity_save('screening_pack_registration', $reg_load);
+       
+}
+
+function pfe_pip_meetings_update_attendance($registration_id, $attended) {
+    $registration = registration_load($registration_id);
+    $wrapper = entity_metadata_wrapper('registration', $registration);
+    if($attended) {
+    $wrapper->field_registrant_attended = TRUE;
+    }
+    else {
+    $wrapper->field_registrant_attended = FALSE;
+    }
+    $wrapper->save();
+  }
+
+function pfe_pip_meetings_representative_registration($form, &$form_state) {
+  $user_type_values = user_types();
+  $state = state();
+  $role_name = array();
+  $count = count($user_type_values);
+
+  foreach(range(0,$count-1) as $val){ 
+  $role_name[] = $user_type_values[$val]['name'];    
+  }
+
+  $company_values = company();
+
+  $form['name'] = array(
+      '#type' => 'textfield',
+      '#title' => 'Name',
+      '#required' => TRUE,
+      '#attributes' => array('class' => array('hidevaluetext')),
+  );
+    
+  $form['surname'] = array(
+      '#type' => 'textfield',
+      '#title' => 'Surname',
+      '#required' => TRUE,
+      '#attributes' => array('class' => array('hidevaluetext')),
+  );
+
+  $form['mail'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Username'),
+      '#required' => TRUE,
+  );
+
+  $form['pass'] = array(
+      '#type' => 'password',
+      '#title' => 'Password',
+      '#required' => TRUE,
+      '#attributes' => array('class' => array('hidevaluetext')),
+  );    
+
+  $form['phone'] = array(
+      '#type' => 'textfield',
+      '#title' => 'Phone',
+      '#required' => TRUE,
+      '#attributes' => array('class' => array('hidevaluetext')),
+      '#maxlength' => 12,
+  );  
+
+  $form['state'] = array(
+      '#title' => t('Territory states'),
+      '#type' => 'radios',
+      '#required' => TRUE,
+      '#options' => $state,
+  );    
+
+  $form['user_type'] = array(
+      '#title' => t('User type'),
+      '#type' => 'select',
+      '#required' => TRUE,
+      '#options' => $role_name,
+  );
+  $form['company'] = array(
+  '#type' => 'select',
+  '#required' => TRUE,
+  '#options' => $company_values,
+  );
+  $form['submit'] = array(
+      '#type' => 'submit',
+      '#value' => t('Submit'),
+  );
+  return $form;
+}
+
+function user_types(){
+  global $user;
+  $query = db_select('role','r')->fields('r',array('name'))->condition('rid',array(3,10,5,7,11,8,9),'IN');
+       $result = $query ->execute()->fetchAll(PDO::FETCH_ASSOC);
+  return $result;
+}
+
+function company(){
+  $values = taxonomy_get_tree(11);
+  $company_values;
+  foreach($values as $key => $val){
+    $company_values[$val->name] = $val->name; 
+  }
+  return $company_values;
+}
+
+function state(){
+  $values = taxonomy_get_tree(1);
+  $state_values;
+  foreach($values as $key => $val){
+    $state_values[$val->name] = $val->name; 
+  }
+  return $state_values;
+}
+
+function pfe_pip_meetings_representative_registration_validate_email($form,&$form_state){
+if(isset($form_state['registration'])){
+    $email= $form_state['values']['anon_mail'];
+    $query_gpdata = db_select('assigned_device', 'asd');
+    $query_gpdata->fields('asd',array('gpid','node_type'))
+            ->condition('asd.returnstatus','0','=')
+           ->condition('asd.gp_email_id',$email,'=');      
+    $result_gpdata = $query_gpdata->execute();
+    $registration_id = $result_gpdata->fetchObject(); 
+     
+    if($registration_id->gpid !=''){
+      if($registration_id->node_type =='screening_pack'){
+    $msg=t(' has already been assigned an ALIVECOR screening device.');
+      }elseif($registration_id->node_type=='alivecor'){
+    $msg=t(' has already been assigned an ALIVECOR device.');
+      }elseif($registration_id->node_type=='meetings'){
+    $msg=t(' has already been assigned a device.');
+      }
+      form_set_error('anon_mail',$form_state['values']['anon_mail'].$msg); 
+    } 
+  }
+}
+function pfe_pip_meetings_representative_registration_validate($form,&$form_state){
+
+$rep_mail_validate = $form['mail']['#value']; 
+if (!valid_email_address($rep_mail_validate)) {
+form_set_error('email submitted', t('Enter a valid email address.'));
+}
+$user1 = user_load_by_name($rep_mail_validate);
+if($user1){
+ form_set_error('registered','User with same email id is already registered');
+}
+}
+
+function pfe_pip_meetings_representative_registration_submit($form, &$form_state) {
+    global $user;
+    $user_id = $user->uid;
+    $pass = user_password();
+    $rep_name = $form['name']['#value'];
+    $rep_surname = $form['surname']['#value'];
+    $rep_phone = $form['phone']['#value'];
+    $rep_pass = $form['pass']['#value'];
+    $rep_mail = $form['mail']['#value'];  
+    $rep_state = $form['state']['#value'];
+    $rep_user_type = $form['user_type']['#value'];
+
+
+    $to = $rep_mail;   
+    $from = "Thrombo 360 Education <no-reply@thrombo360education.com.au>"; // from e-mail address
+    $subject = "Thrombo 360 – User Registration Confirmation "; 
+    $body = '<div><strong>' . t("Dear ") .  $rep_name . ',</strong></div><br><div>' . t("Your account for the Thrombo 360 website has been created. Your login details are provided below: ") . '</div><div></div><div><strong>' .t("Email: "). '</strong>' . $rep_mail . '</div><div><strong>' . t("Password: ") . '</strong>' . $rep_pass . '</div>'. '<div><strong>Website address: </strong> www.thrombo360education.com.au</div><div><img src="' .  t('http://pfthromb360eduaudev.prod.acquia-sites.com/sites/default/themes/custom/paininpractice/images/logo.png"') . '><img src ="' . t('http://pfthromb360eduaudev.prod.acquia-sites.com/sites/default/themes/custom/paininpractice/images/bristol-myers-logo.jpg"') . '></div>'; 
+    $params = array(
+    'subject' => $subject,
+    'body' => $body,
+    );
+  drupal_mail('mailing', 'information', $to, language_default(), $params, $from, $send = TRUE);
+  if($form_state['values']['user_type'] ==0) { $r_id =3; $r_name ='Content Diff'; }
+  if($form_state['values']['user_type'] ==1) { $r_id =10; $r_name ='Facilitator / Speaker';}
+  if($form_state['values']['user_type'] ==2) { $r_id =5; $r_name ='General Practitioner'; }
+  if($form_state['values']['user_type'] ==3) { $r_id =9; $r_name ='Pfizer or BMS Regional Business Manager';}
+  if($form_state['values']['user_type'] ==4) { $r_id =8; $r_name ='Pfizer or BMS Representative'; }
+  if($form_state['values']['user_type'] ==5) { $r_id =7; $r_name ='Swordfish Media Admin';}
+  if($form_state['values']['user_type'] ==6) { $r_id =11; $r_name ='Warehouse';}  
+     $newuser = array(
+  'name' => $form_state['values']['mail'],
+  'pass' => $rep_pass,
+  'mail' => $form_state['values']['mail'],
+  'init' => $form_state['values']['mail'],
+  'field_phone' => array(
+                   'und' => array(
+                   0 => array(
+                   'value' => $rep_phone,
+                  ),
+                ),
+              ),  
+  'field_user_state' => array(
+                        'und' => array(
+                         0 => array(
+                         'value' => $rep_state,
+                        ),
+                      ),
+                    ),
+
+  'field_user_name' =>  array(
+                        'und' => array(
+                         0 => array(
+                         'value' => $rep_name,
+                        ),
+                      ),
+                    ),   
+                     
+  'field_user_surname' =>  array(
+                        'und' => array(
+                         0 => array(
+                         'value' => $rep_surname,
+                        ),
+                      ),
+                    ),                     
+  'status' => 1,
+  'roles' => array(
+  DRUPAL_AUTHENTICATED_RID => 'authenticated user',
+  $r_id => $r_name, // role id for custom roles varies per website
+  ),
+  );    
+  $user1 = user_load_by_name($form_state['values']['mail']);
+  if(!$user1){
+  $user1 = user_save('', $newuser);
+  drupal_set_message('User Registered');
+  }
+} 
+
+function get_current_user_company() {
+  global $user;
+  $user_obj = user_load($user->uid);
+  $current_user_company = $user_obj->field_user_company[LANGUAGE_NONE][0]['value'];
+
+  return $current_user_company;
+}
+
+function get_users_of_company($company = NULL) {
+  if($company == NULL) {
+  $company = get_current_user_company();
+  }
+
+  $same_company_uids = db_select('field_data_field_user_company', 'uc')
+  ->fields('uc', array('entity_id'))
+  ->condition('uc.field_user_company_value', $company)
+  ->execute()
+  ->fetchCol();    
+  return $same_company_uids;
+  }
+
+function _gps_registered_msg(){
+  if( arg(2) !='edit'):
+  $query = new EntityFieldQuery();
+
+  $query->entityCondition('entity_type', 'node')
+  ->entityCondition('bundle', 'meetings')
+  ->propertyCondition('status', NODE_PUBLISHED)
+  ->propertyCondition('title', trim(str_replace('Registration for ','',drupal_get_title())))
+  ->range(0, 1);
+
+  $result = $query->execute();
+  if (isset($result['node'])) {
+  $meet_arr=  array_keys($result['node']);  
+  $meet_nid =$meet_arr[0];
+  }
+  return theme('gps_registered_msg', array('items' => $meet_nid)); 
+  else:
+  return '';
+  endif;
+
+}
+function _registration_form_submit($form, &$form_state){
+  $form_state['redirect'] = '/gp_registered';
+}
+function pfe_pip_view_post_meetings(){
+  $view = views_get_view('view_post_dated_meeting', TRUE);
+  $view->set_display('post_dated_meeting');
+  $view->execute();
+  $stat = $view->result;
+  $node_values = [];
+  foreach ($stat as $key => $value){
+    $node_values[] = $value->nid;   
+  }
+  return $node_values;
+}
+
+function pfe_pip_meetings_views_query_alter(&$view, &$query) {
+  if ($view->name == 'view_meetings') {
+    // Traverse through the 'where' part of the query.
+    foreach ($query->where as &$condition_group) {  
+      foreach ($condition_group['conditions'] as &$condition) {
+      }
+    }
+  }
+}
+function pfe_pip_meetings_form_views_exposed_form_alter(&$form, $form_state, $form_id) {
+if ($form_id == 'views_exposed_form' && $form['#id']=='views-exposed-form-warehouse-device-report-page') {
+  $form['submit']['#value']= t('Search');
+  }
+}
+
+/**Add Token in Rules for date format**/
+function pfe_pip_meetings_token_info() {
+// found in the node replacement section
+$info['tokens']['node']['meeting_date'] = array(
+    'name' => t('Meeting Date token'),
+    'description' => t('Meeting Date (d F Y Format) field.'),
+);
+return $info;
+}
+
+
+function pfe_pip_meetings_tokens($type, $tokens, array $data = array(), array $options = array()) {
+$replacements = array();
+if ($type == 'node' && !empty($data['node']) && $data['node']->type="meetings" ) {
+    $node = $data['node'];  
+    
+    foreach ($tokens as $name => $original) {
+        switch ($name) {                                               
+                case 'meeting_date':
+                $toreplace = date("d F Y",$data['node']->field_meeting_date[LANGUAGE_NONE]['0']['value']);
+                $replacements[$original] = $toreplace;                      
+                break;
+        }
+    }
+}  
+return $replacements;
+}
+
+function pfe_pip_meetings_flag_flag($flag, $entity_id, $account, $flagging) {
+
+if($flag->fid=='1'){
+pfe_pip_meetings_cancel_meeting($entity_id);
+}
+
+}
+
+function pfe_pip_meetings_cancel_meeting($values) {
+$nid = $values; 
+if(is_numeric($nid)) {
+$entity = node_load($nid);
+$entity_type = 'node';     
+list($entity_id) = entity_extract_ids($entity_type, $entity);
+$label = entity_label($entity_type, $entity);
+
+$query = new EntityFieldQuery();
+$result = $query
+  ->entityCondition('entity_type', 'registration')
+  ->propertyCondition('entity_id', $entity_id)
+  ->propertyCondition('entity_type', $entity_type)
+  ->pager(20)
+  ->tableSort($header)
+  ->execute();
+
+if (!empty($result['registration'])) {
+  $registrations = registration_load_multiple(array_keys($result['registration']));
+foreach ($registrations as $registration) {
+  $wrapper = entity_metadata_wrapper('registration', $registration);
+ if(isset($entity->field_meeting_lead_rep[LANGUAGE_NONE]['0']['uid'])){
+  $lead_rep=user_load($entity->field_meeting_lead_rep[LANGUAGE_NONE]['0']['uid']);
+  $data['lead_first_name']=$lead_rep->field_user_name[LANGUAGE_NONE]['0']['value'];
+  $data['lead_last_name']=$lead_rep->field_user_surname[LANGUAGE_NONE]['0']['value'];
+  $data['lead_phone_number']=$lead_rep->field_phone[LANGUAGE_NONE]['0']['value'];
+  }
+if(isset($entity->field_supporting_rep[LANGUAGE_NONE]['0']['uid'])){
+  $support_rep=user_load($entity->field_supporting_rep[LANGUAGE_NONE]['0']['uid']);
+  $data['support_first_name']=$support_rep->field_user_name[LANGUAGE_NONE]['0']['value'];
+  $data['support_last_name']=$support_rep->field_user_surname[LANGUAGE_NONE]['0']['value'];
+  $data['support_phone_number']=$support_rep->field_phone[LANGUAGE_NONE]['0']['value'];
+}
+
+  $data['email'] = $wrapper->field_registrant_email->value();
+  $data['gp_name'] = $wrapper->field_registrant_name->value();
+  $data['gp_surname'] = $wrapper->field_registrant_surname->value();
+  $data['meeting_id'] = $entity->title;
+  $data['meeting_date'] = date('d F Y',$entity->field_meeting_date[LANGUAGE_NONE]['0']['value']); 
+  $data['meeting_time'] = $entity->field_meeting_time[LANGUAGE_NONE]['0']['value'];
+
+  $params['subject'] = 'Thrombo 360 – Meeting Cancelled';  
+  $params['body'] = theme('cancel_mail_gp', array('items' => $data));
+  $message = drupal_mail('pfe_pip_meetings', 'cancel_mail', $data['email'], $language, $params, NULL, TRUE);
+}     
+}
+
+$data=array();
+$rep_result=array();
+$rep_result[]= $entity->field_meeting_lead_rep[LANGUAGE_NONE]['0']['uid'];
+$rep_result[]=$entity->field_supporting_rep[LANGUAGE_NONE]['0']['uid']; 
+foreach($entity->field_meeting_additional_rep[LANGUAGE_NONE] as $additional_rep){
+    $rep_result[]=$additional_rep['uid'];
+}    
+if (!empty($rep_result)) {
+  $registrations = user_load_multiple(($rep_result));
+  foreach ($registrations as $registration) {
+      $data['email'] = $registration->mail;
+      $data['rep_name'] = $registration->field_user_name[LANGUAGE_NONE]['0']['value'];
+      $data['rep_surname'] = $registration->field_user_surname[LANGUAGE_NONE]['0']['value'];
+      $data['meeting_id'] = $entity->title;
+      $data['meeting_date'] = date('d F Y',$entity->field_meeting_date[LANGUAGE_NONE]['0']['value']);    
+    $params['subject'] = 'Thrombo 360 – Meeting Cancelled';  
+    $params['body'] = theme('cancel_mail_rep', array('items' => $data));
+    $message = drupal_mail('pfe_pip_meetings', 'cancel_mail', $data['email'], $language, $params, NULL, TRUE);
+    }        
+  }
+  if ($message['send']) {
+      drupal_set_message(t('Success! The cancel e-mails has been sent.'));
+  }  
+}  
+}     
+/**
+* Implements hook_node_submit($node, $form, &$form_state).
+*/
+function pfe_pip_meetings_node_submit($node, $form, &$form_state) {
+    $now = date('Y-m-d');
+    $today = strtotime($now);
+    $meeting_date=$node->field_meeting_date[LANGUAGE_NONE]['0']['value'];
+  if($meeting_date<$today){        
+    $node->field_meeting_status[LANGUAGE_NONE][0]['value'] = 'complete';
+    node_save($node);
+  }
+}
+
+function pr($arr, $die=0){
+
+if($die == 1){
+die();
+}
+}
+
+/*Validation For Meeting Conditional Field*/
+function create_meeting_validate($form, &$form_state)
+{  
+  $fax_value= $form_state['values']['field_faxback_non_faxback'][LANGUAGE_NONE]['0']['value'];
+  $fax_num_value= $form_state['values']['field_fax_number'][LANGUAGE_NONE]['0']['value'];
+  $meeting_type_value=$form_state['values']['field_template_meeting_type'][LANGUAGE_NONE]['0']['value'];
+  $meeting_title_value=$form_state['values']['field_speaker_topic'][LANGUAGE_NONE]['0']['value'];
+  $modulae_type_value=$form_state['values']['field_module_type'][LANGUAGE_NONE]['0']['tid'];
+  if($fax_value=='F' && $fax_num_value==''){
+  form_set_error('field_fax_number', t('Fax Number field is required.'));
+  }
+  if($meeting_type_value=='speaker'){
+  if($meeting_title_value==''){
+      form_set_error('field_speaker_topic', t('Meeting Title field is required.'));
+  }
+$i=0;
+foreach($form_state['values']['field_session_details'][LANGUAGE_NONE] as $value){
+  if(isset($form_state['values']['field_session_details'][LANGUAGE_NONE][$i])){ 
+        $session_title=$form_state['values']['field_session_details'][LANGUAGE_NONE][$i]['field_session_title'][LANGUAGE_NONE]['0']['value'];
+       $session_content=$form_state['values']['field_session_details'][LANGUAGE_NONE][$i]['field_session_content'][LANGUAGE_NONE]['0']['value'];
+       $session_duration=$form_state['values']['field_session_details'][LANGUAGE_NONE][$i]['field_duration'][LANGUAGE_NONE]['0']['value'];
+   if($session_title=='' || $session_content=='' || $session_duration==''){
+    form_set_error('', t('Session Details field is required.'));
+   }
+   if($session_title==''){  
+    form_set_error('field_session_details][' . LANGUAGE_NONE . ']['.$i.'][field_session_title');
+   }
+   if($session_content==''){
+    form_set_error('field_session_details][' . LANGUAGE_NONE . ']['.$i.'][field_session_content');
+   }
+   if($session_duration==''){
+    form_set_error('field_session_details][' . LANGUAGE_NONE . ']['.$i.'][field_duration');
+   }
+      
+  }      
+  $i++;
+} 
+}elseif($meeting_type_value=='modular' && $modulae_type_value==''){   
+form_set_error('field_module_type', t('Module Type field is required.'));
+}
+
+
+}
+/*download_offer_letter*/
+function download_offer_letter($device_id,$gp_id) { 
+  $filename="deviceid".$device_id."-offer-letter.pdf";
+  $path = 'public://system_pdf/'.$filename; 
+  file_transfer($path, array(
+    'Content-Type'=>'application/octet-stream',
+    'Content-Disposition'=>'attachment; filename="offer-letter.pdf"',
+    'Content-Length' => filesize($path),
+  )); 
+}
+/*download_offer_letter*/
